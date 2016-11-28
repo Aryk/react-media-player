@@ -13,7 +13,9 @@
     "dev": "webpack-dev-server --devtool eval --hot --progress --colors",
     "postbuild": "NODE_ENV=production TARGET=minify webpack --config webpack.prod.config.js",
     "prebuild": "rm -rf dist && mkdir dist",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "preinstall": "// When installing this from a github repo, it will call install, not publish: https://github.com/npm/npm/issues/3055",
+    "preinstall": "npm run prepublish"
   },
   "repository": {
     "type": "git",

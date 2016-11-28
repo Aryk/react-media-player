@@ -8,4 +8,4 @@ export default (() => {
   return names.reduce((prev, curr) =>
     document.documentElement[curr] ? curr : prev
   )
-})()
+})

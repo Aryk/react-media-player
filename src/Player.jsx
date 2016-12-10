@@ -147,7 +147,7 @@ class Player extends Component {
     // internet connection and are not receiving new data, so we must let this loop continue.
     // Putting this on the Player level allows this behavior to apply to other sources like Vimeo
     // as well and provides for consistent treatment.
-    if (progress > (this._lastProgress || -1)) { // -1 so it's true first time around.
+    if (this._lastProgress===undefined || progress > this._lastProgress) {
       _mediaGetters.getPlayerEvents.onProgress(progress)
     }
 

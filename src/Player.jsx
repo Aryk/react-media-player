@@ -128,9 +128,9 @@ class Player extends Component {
     _mediaGetters.getPlayerEvents.onTimeUpdate(currentTime)
 
     if (this._vendor !== 'youtube') {
-      // Aryk: Added 0.1 to anticipate the next keyframe
+      // @Aryk: Added 0.1 to anticipate the next keyframe
       if (endTime && currentTime + 0.1 > endTime) {
-        // Aryk: For Youtube, stop() will also trigger onEnded, but
+        // @Aryk: For Youtube, stop() will also trigger onEnded, but
         // we have Youtube as an exception, so we are ok here.
         media.stop();
         this._handleOnEnded();
@@ -138,20 +138,25 @@ class Player extends Component {
     }
   }
 
-  _handleOnPlay = (val) => {
+  _handleOnProgress = (progress) => {
     const { _mediaGetters } = this.context
-    const { onPlay } = this.props
 
-    _mediaGetters.getPlayerEvents.onPlay(val)
-
-    if (typeof onPlay === 'function') {
-      onPlay()
+    // @Aryk: If it is not "progressing" we do not trigger the callbacks. This is specifically
+    // important for Youtube because the youtube API will trigger a BUFFERING if you seekTo on a "cued" video.
+    // We cannot simply break the requestAnimationFrame loop, because it's possible you are on a bad
+    // internet connection and are not receiving new data, so we must let this loop continue.
+    // Putting this on the Player level allows this behavior to apply to other sources like Vimeo
+    // as well and provides for consistent treatment.
+    if (progress > (this._lastProgress || -1)) { // -1 so it's true first time around.
+      _mediaGetters.getPlayerEvents.onProgress(progress)
     }
+
+    this._lastProgress = progress
   }
 
   render() {
     const { src, vendor: _vendor, autoPlay, onReady, onEnded, onTimeUpdate, defaultCurrentTime, defaultVolume, defaultMuted, startTime, endTime, ...extraProps } = this.props
-    const { onPause, onDuration, onProgress, onMute, onVolumeChange, onError } = this.context._mediaGetters.getPlayerEvents
+    const { onPause, onDuration, onMute, onVolumeChange, onError, onPlay } = this.context._mediaGetters.getPlayerEvents
 
     const { vendor, component } = getVendor(src, _vendor)
     this._vendor = vendor
@@ -164,8 +169,8 @@ class Player extends Component {
         onReady: this._handleOnReady,
         onEnded: this._handleOnEnded,
         onTimeUpdate: this._handleOnTimeUpdate,
-        onPlay: this._handleOnPlay,
-        ...{onPause, onDuration, onProgress, onMute, onVolumeChange, onError},
+        onProgress: this._handleOnProgress,
+        ...{onPause, onDuration, onMute, onVolumeChange, onError, onPlay},
         extraProps,
       })
     )

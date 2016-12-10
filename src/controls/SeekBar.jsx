@@ -11,8 +11,10 @@ class SeekBar extends Component {
   }
 
   _handleMouseDown = () => {
-    this._isPlayingOnMouseDown = this.props.media.isPlaying
-    this.props.media.pause()
+    const media = this.props.media
+    this._isPlayingOnMouseDown = media.isPlaying
+    this._neverPlayed = media.progress === 0
+    media.pause()
   }
 
   _handleMouseUp = ({ target: { value } }) => {
@@ -25,6 +27,11 @@ class SeekBar extends Component {
     // only play if media was playing prior to mouseDown
     if (this._isPlayingOnMouseDown) {
       this.props.media.play()
+    }
+    // on some players (at least vimeo and youtube), seekTo before the video was played will cause
+    // it to play even if autoplay is off.
+    else if (this._neverPlayed) {
+      this.props.media.pause()
     }
   }
 

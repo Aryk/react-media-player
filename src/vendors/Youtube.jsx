@@ -6,8 +6,8 @@ import vendorPropTypes from './vendor-prop-types'
 class Youtube extends Component {
   static propTypes = vendorPropTypes
 
-  _videoId = getYoutubeId(this.props.src)
-  _lastVideoId = this._videoId
+  _videoParams = null
+  _lastVideoParams = null
   _isReady = false
   _isMounted = false
   _progressId = null
@@ -19,19 +19,18 @@ class Youtube extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.src !== this.props.src) {
-      this._lastVideoId = this._videoId
-      this._videoId = getYoutubeId(nextProps.src)
+    const nextVideoParams = this._getVideoParams(nextProps)
+    if (!this._videoParams || this._videoParamsNotEqual(this._videoParams, nextVideoParams)) {
+      this._registerNewVideoParams(nextVideoParams)
 
       if (this._isReady) {
-        if (nextProps.autoPlay) {
-          this._player.loadVideoById(this._videoId)
-        } else {
-          this._player.cueVideoById(this._videoId)
-        }
-        this.props.onReady()
+        this._cueVideo()
       }
     }
+  }
+
+  componentWillMount() {
+    this._registerNewVideoParams(this._getVideoParams(this.props))
   }
 
   componentWillUnmount() {
@@ -54,9 +53,33 @@ class Youtube extends Component {
     return this._player
   }
 
+  _registerNewVideoParams(videoParams) {
+    this._lastVideoParams = this._videoParams
+    this._videoParams = videoParams
+  }
+
+  _videoParamsNotEqual(paramsA, paramsB) {
+    return paramsA.videoId!==paramsB.videoId ||
+      paramsA.startSeconds!==paramsB.startSeconds ||
+      paramsA.endSeconds!==paramsB.endSeconds
+  }
+
+  _getVideoParams(props) {
+    return {
+      videoId: getYoutubeId(props.src),
+      startSeconds: props.startTime,
+      endSeconds: props.endTime
+    }
+  }
+
+  _cueVideo() {
+    // Autoplay is handled one level up on Player#_handleOnReady.
+    this._player.cueVideoById(this._videoParams)
+    this.props.onReady()
+  }
+
   _createPlayer() {
     this._player = new YT.Player(this._node, {
-      videoId: this._videoId,
       events: this._events(),
       playerVars: {
         controls: 0,
@@ -69,13 +92,8 @@ class Youtube extends Component {
   _events() {
     return {
       onReady: () => {
-        // if id changed before the player was ready we need to load the new one
-        if (this._videoId !== this._lastVideoId) {
-          this._player.loadVideoById(this._videoId)
-        }
+        this._cueVideo()
         this._isReady = true
-        this.props.onDuration(this._player.getDuration())
-        this.props.onReady()
       },
       onStateChange: ({ data }) => {
         const { PLAYING, PAUSED, ENDED, BUFFERING, CUED } = window.YT.PlayerState
@@ -97,7 +115,9 @@ class Youtube extends Component {
           this.props.onPause(false)
         }
 
-        if (data === ENDED) {
+        // Videos loaded back-to-back would be skipped. Bug in the API, so checking for getVideoLoadedFraction()
+        // Found fix here: http://stackoverflow.com/questions/31510351/youtube-iframe-api-loadvideobyid-skips-the-video.
+        if (data === ENDED && this._player.getVideoLoadedFraction() > 0) {
           this.props.onEnded(false)
         }
 

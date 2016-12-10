@@ -12,8 +12,6 @@ class Player extends Component {
   }
 
   static defaultProps = {
-    startTime: 0,
-    endTime: -1,
     defaultVolume: 1,
     defaultMuted: false
   }
@@ -74,7 +72,7 @@ class Player extends Component {
   }
 
   _handleOnReady = () => {
-    const { media, _mediaSetters } = this.context
+    const { media } = this.context
     const { autoPlay, onReady, startTime } = this.props
 
     media.setVolume(media.volume)
@@ -83,10 +81,14 @@ class Player extends Component {
     if (!this._defaultsSet) {
       this._setDefaults()
     }
-    if (startTime > -1 && media.currentTime!=startTime) {
-      media.seekTo(startTime)
-      if (!autoPlay) {
-        media.pause(); // seekTo when onReady causes to start playing.
+
+    // Youtube support start and end times through the api.
+    if (this._vendor !== 'youtube') {
+      if (startTime && media.currentTime!==startTime) {
+        media.seekTo(startTime)
+        if (!autoPlay) {
+          media.pause(); // seekTo when onReady causes to start playing.
+        }
       }
     }
 
@@ -106,7 +108,9 @@ class Player extends Component {
     const { loop, onEnded, startTime } = this.props
 
     if (loop) {
-      media.seekTo(startTime)
+      if (startTime) {
+        media.seekTo(startTime)
+      }
       media.play()
     } else {
       _mediaSetters.setPlayerState({ isPlaying: false })
@@ -118,32 +122,51 @@ class Player extends Component {
   }
 
   _handleOnTimeUpdate = (currentTime) => {
-    const { _mediaGetters } = this.context
+    const { _mediaGetters, media } = this.context
     const { endTime } = this.props
 
     _mediaGetters.getPlayerEvents.onTimeUpdate(currentTime)
 
-    if (endTime > -1 && currentTime > endTime) {
-      this._handleOnEnded();
+    if (this._vendor !== 'youtube') {
+      // Aryk: Added 0.1 to anticipate the next keyframe
+      if (endTime && currentTime + 0.1 > endTime) {
+        // Aryk: For Youtube, stop() will also trigger onEnded, but
+        // we have Youtube as an exception, so we are ok here.
+        media.stop();
+        this._handleOnEnded();
+      }
+    }
+  }
+
+  _handleOnPlay = (val) => {
+    const { _mediaGetters } = this.context
+    const { onPlay } = this.props
+
+    _mediaGetters.getPlayerEvents.onPlay(val)
+
+    if (typeof onPlay === 'function') {
+      onPlay()
     }
   }
 
   render() {
     const { src, vendor: _vendor, autoPlay, onReady, onEnded, onTimeUpdate, defaultCurrentTime, defaultVolume, defaultMuted, startTime, endTime, ...extraProps } = this.props
+    const { onPause, onDuration, onProgress, onMute, onVolumeChange, onError } = this.context._mediaGetters.getPlayerEvents
+
     const { vendor, component } = getVendor(src, _vendor)
+    this._vendor = vendor
 
     return (
       createElement(component, {
         ref: this._setPlayer,
-        src,
-        vendor,
-        autoPlay,
+        ...{src, vendor, autoPlay, startTime, endTime},
         isLoading: this._setLoading,
         onReady: this._handleOnReady,
         onEnded: this._handleOnEnded,
-        extraProps,
-        ...this.context._mediaGetters.getPlayerEvents,
         onTimeUpdate: this._handleOnTimeUpdate,
+        onPlay: this._handleOnPlay,
+        ...{onPause, onDuration, onProgress, onMute, onVolumeChange, onError},
+        extraProps,
       })
     )
   }

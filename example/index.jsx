@@ -89,7 +89,6 @@ class App extends Component {
               autoPlay={autoPlay}
               loop={repeatTrack}
               currentTrack={currentTrack.label}
-              repeatTrack={repeatTrack}
               onPrevTrack={() => this._navigatePlaylist(-1)}
               onNextTrack={() => this._navigatePlaylist(1)}
               onRepeatTrack={() => { this.setState({ repeatTrack: !repeatTrack }) }}

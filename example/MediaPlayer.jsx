@@ -32,12 +32,8 @@ class MediaPlayer extends Component {
     this.props.onRepeatTrack()
   }
 
-  _handleEnded = () => {
-    this.props.onNextTrack()
-  }
-
   render() {
-    const { src, currentTrack, repeatTrack, autoPlay } = this.props
+    const { src, currentTrack, loop, autoPlay, onPlay, onEnded } = this.props
     return (
       <Media>
         { mediaProps =>
@@ -50,12 +46,7 @@ class MediaPlayer extends Component {
               className="media-player-element"
               onClick={() => mediaProps.playPause()}
             >
-              <Player
-                src={src}
-                loop={repeatTrack}
-                autoPlay={autoPlay}
-                onEnded={this._handleEnded}
-              />
+              <Player {...{src, autoPlay, onPlay, onEnded, loop}} />
             </div>
             <div className="media-controls media-controls--full">
               <div className="media-row">
@@ -79,7 +70,7 @@ class MediaPlayer extends Component {
                 <div className="media-control-group">
                   <Repeat
                     className="media-control media-control--repeat"
-                    isActive={repeatTrack}
+                    isActive={loop}
                     onClick={this._handleRepeatTrack}
                   />
                 </div>

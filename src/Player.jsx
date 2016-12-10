@@ -128,9 +128,9 @@ class Player extends Component {
     _mediaGetters.getPlayerEvents.onTimeUpdate(currentTime)
 
     if (this._vendor !== 'youtube') {
-      // Aryk: Added 0.1 to anticipate the next keyframe
+      // @Aryk: Added 0.1 to anticipate the next keyframe
       if (endTime && currentTime + 0.1 > endTime) {
-        // Aryk: For Youtube, stop() will also trigger onEnded, but
+        // @Aryk: For Youtube, stop() will also trigger onEnded, but
         // we have Youtube as an exception, so we are ok here.
         media.stop();
         this._handleOnEnded();

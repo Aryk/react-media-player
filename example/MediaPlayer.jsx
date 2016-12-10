@@ -70,7 +70,7 @@ class MediaPlayer extends Component {
                 <div className="media-control-group">
                   <Repeat
                     className="media-control media-control--repeat"
-                    isActive={repeatTrack}
+                    isActive={loop}
                     onClick={this._handleRepeatTrack}
                   />
                 </div>

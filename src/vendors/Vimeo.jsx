@@ -56,13 +56,13 @@ class Vimeo extends Component {
         this.props.onTimeUpdate(data.data.seconds)
         break;
       case 'play':
-        this.props.onPlay(true)
+        this.props.onPlay()
         break;
       case 'pause':
-        this.props.onPause(false)
+        this.props.onPause()
         break;
       case 'finish':
-        this.props.onEnded(false)
+        this.props.onEnd();
         break;
     }
 
@@ -100,8 +100,13 @@ class Vimeo extends Component {
     this._postMessage('pause')
   }
 
-  stop() {
+  unload() {
     this._postMessage('unload')
+  }
+
+  end() {
+    this.pause();
+    this.props.onEnd();
   }
 
   seekTo(currentTime) {

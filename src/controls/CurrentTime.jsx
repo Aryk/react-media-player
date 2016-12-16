@@ -1,20 +1,19 @@
 import React, { Component, PropTypes } from 'react'
-import withMediaProps from '../decorators/with-media-props'
 import formatTime from '../utils/format-time'
 
 class CurrentTime extends Component {
-  shouldComponentUpdate({ media }) {
-    return this.props.media.currentTime !== media.currentTime
+  shouldComponentUpdate({ currentTime }) {
+    return this.props.currentTime !== currentTime
   }
 
   render() {
-    const { className, style, media } = this.props
+    const { className, style, currentTime } = this.props;
     return (
       <time className={className} style={style}>
-        {formatTime(media.currentTime)}
+        {formatTime(currentTime)}
       </time>
     )
   }
 }
 
-export default withMediaProps(CurrentTime)
+export default CurrentTime

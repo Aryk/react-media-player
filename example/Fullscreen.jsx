@@ -1,20 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import { withMediaProps } from '../src/react-media-player'
 
 class Fullscreen extends Component {
-  static contextTypes = {
-    fullscreen: PropTypes.func,
-    isFullscreen: PropTypes.bool
-  }
-
-  _handleFullscreen = () => {
-    this.props.media.fullscreen()
-  }
 
   render() {
-    const { isFullscreen, fullscreen } = this.context
+    const { isFullscreen, fullscreen, className } = this.props;
     return (
-      <svg width="36px" height="36px" viewBox="0 0 36 36" className={this.props.className} onClick={() => this._handleFullscreen()}>
+      <svg width="36px" height="36px" viewBox="0 0 36 36" className={className} onClick={fullscreen}>
         <circle fill="#373D3F" cx="18" cy="18" r="18"/>
         {
           !isFullscreen ?
@@ -36,4 +27,4 @@ class Fullscreen extends Component {
   }
 }
 
-export default withMediaProps(Fullscreen)
+export default Fullscreen

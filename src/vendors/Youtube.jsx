@@ -100,7 +100,7 @@ class Youtube extends Component {
         const isPlaying = (data === PLAYING)
 
         if (isPlaying) {
-          this.props.onPlay(true)
+          this.props.onPlay()
           this.props.onDuration(this._player.getDuration())
           this._timeUpdateId = requestAnimationFrame(this._handleTimeUpdate)
         } else {
@@ -112,16 +112,17 @@ class Youtube extends Component {
         }
 
         if (data === PAUSED) {
-          this.props.onPause(false)
+          this.props.onPause()
         }
 
         // Videos loaded back-to-back would be skipped. Bug in the API, so checking for getVideoLoadedFraction()
         // Found fix here: http://stackoverflow.com/questions/31510351/youtube-iframe-api-loadvideobyid-skips-the-video.
         if (data === ENDED && this._player.getVideoLoadedFraction() > 0) {
-          this.props.onEnded(false)
+          this.props.onEnd();
+          this._onEndCalled = true;
         }
 
-        // start fetching progress when playing or buffering
+        // start fetching progress when playing or buffering. This is also called when BUFFERING ends
         if (isPlaying || data === BUFFERING) {
           this._progressId = requestAnimationFrame(this._handleProgress)
         }
@@ -145,12 +146,20 @@ class Youtube extends Component {
     this._player.pauseVideo()
   }
 
-  stop() {
-    this._player.stopVideo()
+  // May or may not put the player in an ENDED state after calling stopVideo(), so make sure onEnd is called.
+  // See https://developers.google.com/youtube/js_api_reference
+  end() {
+    this._onEndCalled = false;
+    this._player.stopVideo();
+    if (!this._onEndCalled) {
+      this.props.onEnd();
+      this._onEndCalled = true;
+    }
   }
 
   seekTo(currentTime) {
-    this._player.seekTo(currentTime)
+    this._player.seekTo(currentTime);
+    this.props.onTimeUpdate(currentTime);
   }
 
   mute(muted) {

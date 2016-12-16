@@ -1,8 +1,16 @@
 import React, { Component, PropTypes } from 'react'
 import CircleProgress from './CircleProgress'
-import { Media, Player } from '../src/react-media-player'
+import { Player, utils } from '../src/react-media-player'
+
+const { mediaHelper } = utils;
 
 class CircleMediaPlayer extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = Object.assign({}, Player.defaultMediaState);
+  }
+
   componentDidMount() {
     this._circle = new CircleProgress(this._svg)
   }
@@ -25,31 +33,28 @@ class CircleMediaPlayer extends Component {
     )
   }
 
-  _handleTimeUpdate = ({ currentTime, duration }) => {
-    this._circle.setProgress(currentTime / duration * 100)
-  }
+  _handleTimeUpdate = (currentTime) => {
+    this._circle.setProgress(currentTime / this.state.statDuration * 100)
+  };
 
   render() {
+    const media = mediaHelper(this);
+
     return (
-      <Media>
-        {({ isPlaying, playPause }) =>
-          <button className="circle-media-player" onClick={() => playPause()}>
-            <Player
-              src={this.props.src}
-              vendor="audio"
-              onTimeUpdate={this._handleTimeUpdate}
-            />
-            <svg width="32px" height="32px" viewBox="0 0 32 32">
-              <circle cx="16" cy="16" r="14.5" className="circle-media-player__background" />
-              <circle ref={c => this._svg = c} cx="16" cy="16" r="14.5" className="circle-media-player__foreground" />
-              { isPlaying
-                  ? this.renderPause()
-                  : this.renderPlay()
-              }
-            </svg>
-          </button>
-        }
-      </Media>
+      <button className="circle-media-player" onClick={media.togglePlay}>
+        <Player
+          src={this.props.src}
+          vendor="audio"
+          onTimeUpdate={this._handleTimeUpdate}
+
+          {...media.toPlayerProps()}
+        />
+        <svg width="32px" height="32px" viewBox="0 0 32 32">
+          <circle cx="16" cy="16" r="14.5" className="circle-media-player__background" />
+          <circle ref={c => this._svg = c} cx="16" cy="16" r="14.5" className="circle-media-player__foreground" />
+          { media.isPlaying ? this.renderPause() : this.renderPlay() }
+        </svg>
+      </button>
     )
   }
 }

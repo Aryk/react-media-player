@@ -48,9 +48,9 @@ class HTML5 extends Component {
     this._player.pause()
   }
 
-  stop() {
-    this._player.pause()
-    this._player.currentTime = 0
+  end() {
+    this._player.pause();
+    this._handleEnded();
   }
 
   seekTo(currentTime) {
@@ -67,14 +67,15 @@ class HTML5 extends Component {
     this._player.volume = volume
   }
 
+  // See https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
   get _playerEvents() {
     return {
       onCanPlay: this._handleCanPlay,
       onPlay: this._handlePlay,
-      onPlaying: this._isNotLoading,
+      // onPlaying: this._isNotLoading,
+      // onWaiting: this._isLoading,
       onPause: this._handlePause,
       onEnded: this._handleEnded,
-      onWaiting: this._isLoading,
       onError: this._handleError,
       onProgress: this._handleProgress,
       onLoadedMetadata: this._handleDuration,
@@ -83,34 +84,24 @@ class HTML5 extends Component {
     }
   }
 
-  _isLoading = () => {
-    this.props.isLoading(true)
-  }
-
-  _isNotLoading = () => {
-    this.props.isLoading(false)
-  }
-
   _handleCanPlay = () => {
     this.props.onReady()
   }
 
   _handlePlay = () => {
-    this.props.onPlay(true)
-    this._isNotLoading()
+    this.props.onPlay()
   }
 
   _handlePause = () => {
-    this.props.onPause(false)
+    this.props.onPause()
   }
 
   _handleEnded = () => {
-    this.props.onEnded(false)
+    this.props.onEnd()
   }
 
   _handleError = (e) => {
     this.props.onError(e)
-    this._isNotLoading()
   }
 
   _handleProgress = ({ target: { buffered, duration } }) => {
@@ -142,7 +133,7 @@ class HTML5 extends Component {
   }
 
   _destroyAudioObject() {
-    this.stop()
+    this.pause()
     this._player = null
   }
 
@@ -160,7 +151,7 @@ class HTML5 extends Component {
 
   render() {
     const { vendor, src } = this.props
-    const { useAudioObject, ...extraProps } = this.props.extraProps
+    const { useAudioObject, ...extraProps } = this.props.extraProps;
 
     if (!useAudioObject) {
       return createElement(vendor, {

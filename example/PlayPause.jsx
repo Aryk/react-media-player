@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { withMediaProps } from '../src/react-media-player'
 import Transition from 'react-motion-ui-pack'
 
 class ScaleX extends Component {
@@ -17,12 +16,9 @@ class ScaleX extends Component {
 }
 
 class PlayPause extends Component {
-  _handlePlayPause = () => {
-    this.props.media.playPause()
-  }
 
   render() {
-    const { media: { isPlaying }, className } = this.props
+    const { isPlaying, togglePlay, className } = this.props;
     return (
       <svg
         role="button"
@@ -30,7 +26,7 @@ class PlayPause extends Component {
         height="36px"
         viewBox="0 0 36 36"
         className={className}
-        onClick={this._handlePlayPause}
+        onClick={togglePlay}
       >
       	<circle fill="#373D3F" cx="18" cy="18" r="18"/>
           <ScaleX>
@@ -56,4 +52,4 @@ class PlayPause extends Component {
   }
 }
 
-export default withMediaProps(PlayPause)
+export default PlayPause

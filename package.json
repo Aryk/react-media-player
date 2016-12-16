@@ -48,6 +48,7 @@
     "chokidar": "^1.6.1",
     "css-loader": "^0.25.0",
     "http-server": "^0.9.0",
+    "shallowequal": "0.2.2 ",
     "node-libs-browser": "^1.0.0",
     "node-sass": "^3.2.0",
     "postcss-loader": "^0.13.0",

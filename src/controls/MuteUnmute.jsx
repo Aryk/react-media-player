@@ -1,28 +1,24 @@
-import React, { Component, PropTypes } from 'react'
-import withMediaProps from '../decorators/with-media-props'
+import React, { Component } from 'react'
 
 class MuteUnmute extends Component {
-  shouldComponentUpdate({ media }) {
-    return this.props.media.isMuted !== media.isMuted
-  }
-
-  _handleMuteUnmute = () => {
-    this.props.media.muteUnmute()
+  shouldComponentUpdate({ isMuted }) {
+    return this.props.isMuted !== isMuted;
   }
 
   render() {
-    const { className, style, media } = this.props
+    const { className, style, isMuted, toggleMute } = this.props;
+
     return (
       <button
         type="button"
         className={className}
         style={style}
-        onClick={this._handleMuteUnmute}
+        onClick={toggleMute}
       >
-        { media.isMuted ? 'Unmute' : 'Mute' }
+        { isMuted ? 'Unmute' : 'Mute' }
       </button>
     )
   }
 }
 
-export default withMediaProps(MuteUnmute)
+export default MuteUnmute

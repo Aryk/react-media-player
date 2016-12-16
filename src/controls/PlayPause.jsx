@@ -1,28 +1,24 @@
-import React, { Component, PropTypes } from 'react'
-import withMediaProps from '../decorators/with-media-props'
+import React, { Component } from 'react'
 
 class PlayPause extends Component {
-  shouldComponentUpdate({ media }) {
-    return this.props.media.isPlaying !== media.isPlaying
-  }
-
-  _handlePlayPause = () => {
-    this.props.media.playPause()
+  shouldComponentUpdate({ isPlaying }) {
+    return this.props.isPlaying !== isPlaying
   }
 
   render() {
-    const { className, style, media } = this.props
+    const { isPlaying, togglePlay, className, style } = this.props;
+
     return (
       <button
         type="button"
         className={className}
         style={style}
-        onClick={this._handlePlayPause}
+        onClick={togglePlay}
       >
-        { media.isPlaying ? 'Pause' : 'Play' }
+        { isPlaying ? 'Pause' : 'Play' }
       </button>
     )
   }
 }
 
-export default withMediaProps(PlayPause)
+export default PlayPause

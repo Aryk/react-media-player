@@ -1,20 +1,19 @@
 import React, { Component, PropTypes } from 'react'
-import withMediaProps from '../decorators/with-media-props'
 import formatTime from '../utils/format-time'
 
 class Duration extends Component {
-  shouldComponentUpdate({ media }) {
-    return this.props.media.duration !== media.duration
+  shouldComponentUpdate({ duration }) {
+    return this.props.duration !== duration
   }
 
   render() {
-    const { className, style, media } = this.props
+    const { className, style, duration } = this.props;
     return (
       <time className={className} style={style}>
-        {formatTime(media.duration)}
+        {formatTime(duration)}
       </time>
     )
   }
 }
 
-export default withMediaProps(Duration)
+export default Duration

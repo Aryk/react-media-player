@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import MediaPlayer from './MediaPlayer'
 import { utils, Player } from '../src/react-media-player'
 
-const { keyboardControls, mediaStateHelper } = utils;
+const { keyboardControls, mediaHelper } = utils;
 
 const mod = (num, max) => ((num % max) + max) % max;
 
@@ -47,20 +47,17 @@ export default class VideoPlayerWithPlaylist extends Component {
     }, Player.defaultMediaState);
   }
 
-  _stateGetter = () => this.state;
-  _stateSetter = (mediaState) => this.setState(mediaState);
-  _stateHelper = mediaStateHelper.bind(this)();
-
+  _media = mediaHelper(this);
   _keyboardControls = keyboardControls.bind(this);
 
   _handleTrackClick = (track) => {
-    this.setState({ currentTrack: track })
+    this.setState({currentTrack: track})
   };
 
   _navigatePlaylist = (direction) => {
     const playlist = this.props.playlist;
     const newIndex = mod(playlist.indexOf(this.state.currentTrack) + direction, playlist.length)
-    this.setState({ currentTrack: playlist[newIndex] })
+    this.setState({currentTrack: playlist[newIndex]})
   };
 
   _toggleMediaPlayer = () => {
@@ -97,9 +94,7 @@ export default class VideoPlayerWithPlaylist extends Component {
               onPause={() => this.setState({autoPlay: false})}
               onEnd={() => !repeatTrack && this._navigatePlaylist(1)}
               keyboardControls={this._keyboardControls}
-              mediaStateGetter={this._stateGetter}
-              mediaStateSetter={this._stateSetter}
-              mediaStateHelper={this._stateHelper}
+              media={this._media}
             />
             <Playlist
               tracks={playlist}

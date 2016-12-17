@@ -95,12 +95,41 @@ Callback when the player volume has changed.
 
 ## Basic Example
 
-In this example, we use the `Media` class to set up our own basic media player. The `Media` class is not required and can be swapped out with your own container in case you want to more state variables and more complex functionality.
+A basic React component called `Media` is provided to help you get up and running. It's actually pretty straight forward, which is why I recommend not using it and instead just manually setting the default state keys and managing it yourself, but here it is in all it's glory:
 
-```js
+```jsx
+import React, { Component, PropTypes, Children } from 'react'
+import mediaHelper  from './utils/media-helper'
+import Player  from './Player'
+
+class Media extends Component {
+  static propTypes = {
+    children: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = Object.assign({}, Player.defaultMediaState);
+  }
+
+  render() {
+    return this.props.children(mediaHelper(this));
+  }
+}
+
+export default Media
+```
+
+Here is a Video player that uses this component.
+
+```jsx
 import React, { Component } from 'react'
-import { Media, Player, controls } from '../src/react-media-player'
-const { CurrentTime, Progress, SeekBar, PlayPause } = controls;
+import { Media, Player, controls, utils } from '../src/react-media-player'
+import PlayPause from './PlayPause'
+import MuteUnmute from './MuteUnmute'
+import Fullscreen from './Fullscreen'
+
+const { CurrentTime, Progress, SeekBar, Duration, Volume } = controls;
 
 export default class VideoPlayer extends Component {
 
@@ -110,37 +139,61 @@ export default class VideoPlayer extends Component {
       <Media>
         {(media) => {
           return (
-            <div>
+            <div
+              className={'media-player' + (media.state.statFullscreen ? ' media-player--fullscreen' : '')}
+              tabIndex="0"
+            >
               <Player
                 src={this.props.src}
-                onClick={media.stateHelper.togglePlay}
-                
-                {...Player.extractPropsFromMediaState(media.state)}
-                mediaStateGetter={media.stateGetter}
-                mediaStateSetter={media.stateSetter}
+                onClick={media.togglePlay}
+                {...media.toPlayerProps()}
               />
-              <div>
+              <div className="media-controls">
                 <PlayPause
-                  togglePlay={media.stateHelper.togglePlay}
-                  isPlaying={media.stateHelper.isPlaying}
+                  className="media-control media-control--play-pause"
+                  togglePlay={media.togglePlay}
+                  isPlaying={media.isPlaying}
                 />
                 <CurrentTime
+                  className="media-control media-control--current-time"
                   currentTime={media.state.statCurrentTime}
                 />
-                <div>
+                <div className="media-control-group media-control-group--seek">
                   <Progress
+                    className="media-control media-control--progress"
                     progress={media.state.statProgress}
                   />
                   <SeekBar
+                    className="media-control media-control--seekbar"
                     progress={media.state.statProgress}
                     duration={media.state.statDuration}
                     currentTime={media.state.statCurrentTime}
-                    isPlaying={media.stateHelper.isPlaying}
-                    pause={media.stateHelper.pause}
-                    play={media.stateHelper.play}
-                    seekTo={media.stateHelper.seekTo}
+                    isPlaying={media.isPlaying}
+                    pause={media.pause}
+                    play={media.play}
+                    seekTo={media.seekTo}
                   />
                 </div>
+                <Duration
+                  className="media-control media-control--duration"
+                  duration={media.state.statDuration}
+                />
+                <MuteUnmute
+                  className="media-control media-control--mute-unmute"
+                  volume={media.state.statVolume}
+                  isMuted={media.state.statMute}
+                  toggleMute={media.toggleMute}
+                />
+                <Volume
+                  className="media-control media-control--volume"
+                  volume={media.state.statVolume}
+                  setVolume={media.setVolume}
+                />
+                <Fullscreen
+                  className="media-control media-control--fullscreen"
+                  isFullscreen={media.state.statFullscreen}
+                  fullscreen={media.fullscreen}
+                />
               </div>
             </div>
           )
@@ -149,72 +202,62 @@ export default class VideoPlayer extends Component {
     )
   }
 }
-
 ```
+Here is an example, where the `Media` component is not being used.
 
-In order to use your own class, simply add a little boiler plate to set up the default state and define the getters and setters for the state:
-
-```js
-
+```jsx
 import React, { Component } from 'react'
 import { Player, controls, utils } from '../src/react-media-player'
+const { CurrentTime, Progress, SeekBar, PlayPause } = controls;
 
-const { mediaStateHelper } = utils;
-const { CurrentTime, PlayPause, MuteUnmute, Duration, Volume } = controls;
-
-class VideoPlayer extends Component {
+export default class VideoPlayer extends Component {
 
   constructor(props) {
     super(props);
+    // Assign the default state for the media player by merging in Player.defaultMediaState.
     this.state = Object.assign({}, Player.defaultMediaState);
   }
 
-  _stateGetter = () => this.state;
-  _stateSetter = (mediaState) => this.setState(mediaState);
-  _stateHelper = mediaStateHelper.bind(this)();
-
+  // Use the provided helper to make working with the media state easier.
+  media = utils.mediaHelper(this);
+  
   render() {
-    const isFullscreen = this.state.statFullscreen;
-
     return (
       <div>
         <Player
           src={this.props.src}
-          onClick={this._stateHelper.togglePlay}
-
-          // Pass through the props from the state!
-          {...Player.extractPropsFromMediaState(this.state)}
-
-          // Provide your own getter and setter for the state.
-          mediaStateGetter={this._stateGetter}
-          mediaStateSetter={this._stateSetter}
+          onClick={this.media.togglePlay}
+			{/* Pass through the props from the media's state into the player to 'connect' it. */}
+          {...this.media.toPlayerProps()}
         />
         <div>
           <PlayPause
-            togglePlay={this._stateHelper.togglePlay}
-            isPlaying={this._stateHelper.isPlaying}
+            togglePlay={this.media.togglePlay}
+            isPlaying={this.media.isPlaying}
           />
           <CurrentTime
-            currentTime={this.state.statCurrentTime}
+            {/* Access the media's state directly to work with it's information. */}
+            currentTime={this.media.state.statCurrentTime}
           />
-          <Duration
-            duration={this.state.statDuration}
-          />
-          <MuteUnmute
-            volume={this.state.statVolume}
-            isMuted={this.state.statMute}
-            toggleMute={this._stateHelper.toggleMute}
-          />
-          <Volume
-            volume={this.state.statVolume}
-            setVolume={this._stateHelper.setVolume}
-          />
+          <div>
+            <Progress
+              progress={this.media.state.statProgress}
+            />
+            <SeekBar
+              progress={this.media.state.statProgress}
+              duration={this.media.state.statDuration}
+              currentTime={this.media.state.statCurrentTime}
+              isPlaying={this.media.isPlaying}
+              pause={this.media.pause}
+              play={this.media.play}
+              seekTo={this.media.seekTo}
+            />
+          </div>
         </div>
       </div>
     )
   }
 }
-
 ```
 
 <br/>
@@ -256,7 +299,8 @@ class CustomPlayPause extends Component {
   _stateSetter = (mediaState) => this.setState(mediaState);
 
   _handlePlayPause = () => {
-    this.setState({setPlayback: 'playing'})
+    // Start the video playing.
+    this.setState({setPlayback: this.state.setPlayback !== 'playing' ? 'playing' : 'paused'})
   }
 
   render() {
@@ -265,6 +309,8 @@ class CustomPlayPause extends Component {
        <Player
           src={src}
           onClick={_handlePlayPause}
+          {/* These three fields below are usually handled with mediaHelper(this).toPlayerProps */}
+          {/* but we left it here to show you that this is possible as well. See utils.mediaHelper below. */}
           {...Player.extractPropsFromMediaState(this.state)}
           mediaStateGetter={this._stateGetter}
           mediaStateSetter={this._stateSetter}
@@ -284,13 +330,13 @@ class CustomPlayPause extends Component {
 export default CustomPlayPause
 ```
 
-## `utils.mediaStateHelper`
+## `utils.mediaHelper`
 
 However, to make it easy to work with common actions, a media state helper has been provided. So the previous example would become:
 
 ```js
-
 import React, { Component } from 'react'
+import { Player, utils } from '../src/react-media-player'
 
 class CustomPlayPause extends Component {
 
@@ -299,27 +345,23 @@ class CustomPlayPause extends Component {
     this.state = Object.assign({}, Player.defaultMediaState);
   }
 
-  _stateGetter = () => this.state;
-  _stateSetter = (mediaState) => this.setState(mediaState);
-  _stateHelper = mediaStateHelper.bind(this)();
+  media = utils.mediaHelper(this);
 
   render() {
     const { className, style, media, src } = this.props
     return (
        <Player
           src={src}
-          onClick={this._stateHelper.togglePlay}
-          {...Player.extractPropsFromMediaState(this.state)}
-          mediaStateGetter={this._stateGetter}
-          mediaStateSetter={this._stateSetter}
+          onClick={this.media.togglePlay}
+          {...media.toPlayerProps()}
       />
       <button
         type="button"
         className={className}
         style={style}
-        onClick={this._stateHelper.togglePlay}
+        onClick={this.media.togglePlay}
       >
-        { this._stateHelper.isPlaying ? 'Pause' : 'Play' }
+        { media.isPlaying ? 'Pause' : 'Play' }
       </button>
     )
   }
@@ -374,9 +416,9 @@ class MediaPlayer extends Component {
           <Player
             src="against-them-all.mp3"
             className="media-player"
-          {...Player.extractPropsFromMediaState(this.state)}
-          mediaStateGetter={this._stateGetter}
-          mediaStateSetter={this._stateSetter}
+	         {...Player.extractPropsFromMediaState(this.state)}
+	         mediaStateGetter={this._stateGetter}
+	         mediaStateSetter={this._stateSetter}
           />
         </div>
     )

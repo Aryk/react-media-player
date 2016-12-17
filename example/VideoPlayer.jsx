@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Media, Player, controls, utils } from '../src/react-media-player'
-
 import PlayPause from './PlayPause'
 import MuteUnmute from './MuteUnmute'
 import Fullscreen from './Fullscreen'
@@ -21,16 +20,14 @@ export default class VideoPlayer extends Component {
             >
               <Player
                 src={this.props.src}
-                onClick={media.stateHelper.togglePlay}
-                {...Player.extractPropsFromMediaState(media.state)}
-                mediaStateGetter={media.stateGetter}
-                mediaStateSetter={media.stateSetter}
+                onClick={media.togglePlay}
+                {...media.toPlayerProps()}
               />
               <div className="media-controls">
                 <PlayPause
                   className="media-control media-control--play-pause"
-                  togglePlay={media.stateHelper.togglePlay}
-                  isPlaying={media.stateHelper.isPlaying}
+                  togglePlay={media.togglePlay}
+                  isPlaying={media.isPlaying}
                 />
                 <CurrentTime
                   className="media-control media-control--current-time"
@@ -46,10 +43,10 @@ export default class VideoPlayer extends Component {
                     progress={media.state.statProgress}
                     duration={media.state.statDuration}
                     currentTime={media.state.statCurrentTime}
-                    isPlaying={media.stateHelper.isPlaying}
-                    pause={media.stateHelper.pause}
-                    play={media.stateHelper.play}
-                    seekTo={media.stateHelper.seekTo}
+                    isPlaying={media.isPlaying}
+                    pause={media.pause}
+                    play={media.play}
+                    seekTo={media.seekTo}
                   />
                 </div>
                 <Duration
@@ -60,17 +57,17 @@ export default class VideoPlayer extends Component {
                   className="media-control media-control--mute-unmute"
                   volume={media.state.statVolume}
                   isMuted={media.state.statMute}
-                  toggleMute={media.stateHelper.toggleMute}
+                  toggleMute={media.toggleMute}
                 />
                 <Volume
                   className="media-control media-control--volume"
                   volume={media.state.statVolume}
-                  setVolume={media.stateHelper.setVolume}
+                  setVolume={media.setVolume}
                 />
                 <Fullscreen
                   className="media-control media-control--fullscreen"
                   isFullscreen={media.state.statFullscreen}
-                  fullscreen={media.stateHelper.fullscreen}
+                  fullscreen={media.fullscreen}
                 />
               </div>
             </div>

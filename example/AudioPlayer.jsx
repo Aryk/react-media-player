@@ -4,7 +4,7 @@ import PlayPause from './PlayPause'
 import MuteUnmute from './MuteUnmute'
 
 const { CurrentTime,  SeekBar, Duration, Volume } = controls;
-const { mediaStateHelper } = utils;
+const { mediaHelper } = utils;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const panner = audioContext.createPanner();
@@ -20,9 +20,7 @@ export default class AudioPlayer extends Component {
     this.state = Object.assign({}, Player.defaultMediaState);
   }
 
-  _stateGetter = () => this.state;
-  _stateSetter = (mediaState) => this.setState(mediaState);
-  _stateHelper = mediaStateHelper.bind(this)();
+  media = mediaHelper(this);
 
   componentDidMount() {
     const source = audioContext.createMediaElementSource(this._player.instance);
@@ -45,15 +43,13 @@ export default class AudioPlayer extends Component {
             src={this.props.src}
             useAudioObject
 
-            {...Player.extractPropsFromMediaState(this.state)}
-            mediaStateGetter={this._stateGetter}
-            mediaStateSetter={this._stateSetter}
+            {...this.media.toPlayerProps()}
           />
           <div className="media-controls">
             <PlayPause
               className="media-control media-control--play-pause"
-              togglePlay={this._stateHelper.togglePlay}
-              isPlaying={this._stateHelper.isPlaying}
+              togglePlay={this.media.togglePlay}
+              isPlaying={this.media.isPlaying}
             />
             <CurrentTime
               className="media-control media-control--current-time"
@@ -64,10 +60,10 @@ export default class AudioPlayer extends Component {
               progress={this.state.statProgress}
               duration={this.state.statDuration}
               currentTime={this.state.statCurrentTime}
-              isPlaying={this._stateHelper.isPlaying}
-              pause={this._stateHelper.pause}
-              play={this._stateHelper.play}
-              seekTo={this._stateHelper.seekTo}
+              isPlaying={this.media.isPlaying}
+              pause={this.media.pause}
+              play={this.media.play}
+              seekTo={this.media.seekTo}
             />
             <Duration
               className="media-control media-control--duration"
@@ -77,12 +73,12 @@ export default class AudioPlayer extends Component {
               className="media-control media-control--mute-unmute"
               volume={this.state.statVolume}
               isMuted={this.state.statMute}
-              toggleMute={this._stateHelper.toggleMute}
+              toggleMute={this.media.toggleMute}
             />
             <Volume
               className="media-control media-control--volume"
               volume={this.state.statVolume}
-              setVolume={this._stateHelper.setVolume}
+              setVolume={this.media.setVolume}
             />
           </div>
           <input

@@ -1,9 +1,9 @@
-import mediaStateHelper from './media-state-helper'
+import mediaHelper from './media-helper'
 const MEDIA_KEYS = [0, 'f', 'j', 'k','l', ',', '.', ' ', 'Home', 'End', 'ArrowLeft', 'ArrowTop', 'ArrowRight', 'ArrowDown']
 
 export default function keyboardControls(e) {
   const { key, shiftKey } = e;
-  const helper = mediaStateHelper.bind(this)();
+  const helper = mediaHelper.bind(this)();
 
   // prevent default on any media keys
   MEDIA_KEYS.some(_key => (_key === key) && e.preventDefault());

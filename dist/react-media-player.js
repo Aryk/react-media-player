@@ -12,7 +12,7 @@
 		exports["ReactMediaPlayer"] = factory(require("React"), require("ReactDOM"));
 	else
 		root["ReactMediaPlayer"] = factory(root["React"], root["ReactDOM"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_5__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -64,25 +64,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.utils = exports.controls = exports.withMediaProps = exports.Player = exports.Media = undefined;
+	exports.utils = exports.controls = exports.Player = exports.Media = undefined;
 
 	var _Media2 = __webpack_require__(1);
 
 	var _Media3 = _interopRequireDefault(_Media2);
 
-	var _Player2 = __webpack_require__(8);
+	var _Player2 = __webpack_require__(4);
 
 	var _Player3 = _interopRequireDefault(_Player2);
 
-	var _withMediaProps2 = __webpack_require__(18);
-
-	var _withMediaProps3 = _interopRequireDefault(_withMediaProps2);
-
-	var _controls2 = __webpack_require__(19);
+	var _controls2 = __webpack_require__(24);
 
 	var _controls = _interopRequireWildcard(_controls2);
 
-	var _utils2 = __webpack_require__(29);
+	var _utils2 = __webpack_require__(34);
 
 	var _utils = _interopRequireWildcard(_utils2);
 
@@ -92,7 +88,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.Media = _Media3.default;
 	exports.Player = _Player3.default;
-	exports.withMediaProps = _withMediaProps3.default;
 	exports.controls = _controls;
 	exports.utils = _utils;
 
@@ -106,37 +101,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(3);
+	var _mediaHelper = __webpack_require__(3);
 
-	var _reactDom2 = _interopRequireDefault(_reactDom);
+	var _mediaHelper2 = _interopRequireDefault(_mediaHelper);
 
-	var _contextTypes = __webpack_require__(4);
+	var _Player = __webpack_require__(4);
 
-	var _contextTypes2 = _interopRequireDefault(_contextTypes);
-
-	var _requestFullscreen = __webpack_require__(5);
-
-	var _requestFullscreen2 = _interopRequireDefault(_requestFullscreen);
-
-	var _exitFullscreen = __webpack_require__(6);
-
-	var _exitFullscreen2 = _interopRequireDefault(_exitFullscreen);
-
-	var _fullscreenChange = __webpack_require__(7);
-
-	var _fullscreenChange2 = _interopRequireDefault(_fullscreenChange);
+	var _Player2 = _interopRequireDefault(_Player);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -144,197 +123,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var MEDIA_EVENTS = {
-	  onPlay: 'isPlaying',
-	  onPause: 'isPlaying',
-	  onDuration: 'duration',
-	  onProgress: 'progress',
-	  onTimeUpdate: 'currentTime',
-	  onMute: 'isMuted',
-	  onVolumeChange: 'volume',
-	  onError: null
-	};
-	var MEDIA_EVENTS_KEYS = Object.keys(MEDIA_EVENTS);
-
 	var Media = function (_Component) {
 	  _inherits(Media, _Component);
 
-	  function Media() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
+	  function Media(props) {
 	    _classCallCheck(this, Media);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    var _this = _possibleConstructorReturn(this, (Media.__proto__ || Object.getPrototypeOf(Media)).call(this, props));
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Media.__proto__ || Object.getPrototypeOf(Media)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	      currentTime: 0,
-	      progress: 0,
-	      duration: 0.1,
-	      volume: 1,
-	      isLoading: true,
-	      isPlaying: false,
-	      isMuted: false,
-	      isFullscreen: false
-	    }, _this._playerProps = {}, _this._lastVolume = 0, _this._setPlayer = function (component) {
-	      _this._player = component;
-	    }, _this._setPlayerProps = function (props) {
-	      _this._playerProps = props;
-	    }, _this._setPlayerState = function (state) {
-	      _this.setState(state);
-	    }, _this.play = function () {
-	      _this._player.play();
-	    }, _this.pause = function () {
-	      _this._player.pause();
-	    }, _this.playPause = function () {
-	      if (!_this.state.isPlaying) {
-	        _this._player.play();
-	      } else {
-	        _this._player.pause();
-	      }
-	    }, _this.stop = function () {
-	      _this._player.stop();
-	    }, _this.seekTo = function (currentTime) {
-	      _this._player.seekTo(currentTime);
-	      _this.setState({ currentTime: currentTime });
-	    }, _this.skipTime = function (amount) {
-	      var _this$state = _this.state,
-	          currentTime = _this$state.currentTime,
-	          duration = _this$state.duration;
-
-	      var newTime = currentTime + amount;
-
-	      if (newTime < 0) {
-	        newTime = 0;
-	      } else if (newTime > duration) {
-	        newTime = duration;
-	      }
-
-	      _this.seekTo(newTime);
-	    }, _this.mute = function (isMuted) {
-	      if (isMuted) {
-	        _this._lastVolume = _this.state.volume;
-	        _this._player.setVolume(0);
-	      } else {
-	        var volume = _this._lastVolume > 0 ? _this._lastVolume : 0.1;
-	        _this._player.setVolume(volume);
-	      }
-	      _this._player.mute(isMuted);
-	    }, _this.muteUnmute = function () {
-	      _this.mute(!_this.state.isMuted);
-	    }, _this.setVolume = function (volume) {
-	      var isMuted = volume <= 0;
-
-	      if (isMuted !== _this.state.isMuted) {
-	        _this.mute(isMuted);
-	      } else {
-	        _this._lastVolume = volume;
-	      }
-
-	      _this._player.setVolume(volume);
-	    }, _this.addVolume = function (amount) {
-	      var newVolume = _this.state.volume + amount * 0.01;
-
-	      if (newVolume < 0) {
-	        newVolume = 0;
-	      } else if (newVolume > 1) {
-	        newVolume = 1;
-	      }
-
-	      _this.setVolume(newVolume);
-	    }, _this.fullscreen = function () {
-	      if (!_this.state.isFullscreen) {
-	        (0, _reactDom.findDOMNode)(_this._player)[(0, _requestFullscreen2.default)()]();
-	      } else {
-	        document[(0, _exitFullscreen2.default)()]();
-	      }
-	    }, _this._handleFullscreenChange = function (_ref2) {
-	      var target = _ref2.target;
-
-	      if (target === (0, _reactDom.findDOMNode)(_this._player)) {
-	        _this.setState({ isFullscreen: !_this.state.isFullscreen });
-	      }
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    _this.state = Object.assign({}, _Player2.default.defaultMediaState);
+	    return _this;
 	  }
 
 	  _createClass(Media, [{
-	    key: 'getChildContext',
-	    value: function getChildContext() {
-	      return {
-	        media: this._getPublicMediaProps(),
-	        _mediaSetters: {
-	          setPlayer: this._setPlayer,
-	          setPlayerProps: this._setPlayerProps,
-	          setPlayerState: this._setPlayerState
-	        },
-	        _mediaGetters: {
-	          getPlayerEvents: this._getPlayerEvents()
-	        }
-	      };
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      (0, _fullscreenChange2.default)('add', this._handleFullscreenChange);
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      (0, _fullscreenChange2.default)('remove', this._handleFullscreenChange);
-	    }
-	  }, {
-	    key: '_getPublicMediaProps',
-	    value: function _getPublicMediaProps() {
-	      return _extends({}, this.state, {
-	        play: this.play,
-	        pause: this.pause,
-	        playPause: this.playPause,
-	        stop: this.stop,
-	        seekTo: this.seekTo,
-	        skipTime: this.skipTime,
-	        mute: this.mute,
-	        muteUnmute: this.muteUnmute,
-	        setVolume: this.setVolume,
-	        addVolume: this.addVolume,
-	        fullscreen: this.fullscreen
-	      });
-	    }
-	  }, {
-	    key: '_getPlayerEvents',
-	    value: function _getPlayerEvents() {
-	      var _this2 = this;
-
-	      var events = {};
-
-	      MEDIA_EVENTS_KEYS.forEach(function (key) {
-	        var stateKey = MEDIA_EVENTS[key];
-	        var propCallback = _this2._playerProps[key];
-
-	        events[key] = function (val) {
-	          if (stateKey) {
-	            _this2.setState(_defineProperty({}, stateKey, val));
-	          }
-	          if (typeof propCallback === 'function') {
-	            propCallback(_this2.state);
-	          }
-	        };
-	      });
-	      return events;
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var children = this.props.children;
-
-
-	      if (typeof children === 'function') {
-	        return children(this._getPublicMediaProps());
-	      }
-
-	      return _react.Children.only(children);
+	      return this.props.children((0, _mediaHelper2.default)(this));
 	    }
 	  }]);
 
@@ -342,9 +146,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	Media.propTypes = {
-	  children: _react.PropTypes.oneOfType([_react.PropTypes.func, _react.PropTypes.node]).isRequired
+	  children: _react.PropTypes.func.isRequired
 	};
-	Media.childContextTypes = _contextTypes2.default;
 	exports.default = Media;
 
 /***/ },
@@ -355,9 +158,105 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.default = mediaHelper;
+
+	var _Player = __webpack_require__(4);
+
+	var _Player2 = _interopRequireDefault(_Player);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Two ways to use this function:
+	 *
+	 *   1. On your component, bind it with 'this' and then execute it, like:
+	 *
+	 *         stateHelper = mediaHelper(this);
+	 *         stateHelper.pause() // pauses the video
+	 *
+	 *   2. Use it in reducers or other actions to generate the necessary state back, so
+	 *      if you were using react-redux and used the @connect function to connect your components
+	 *      and pass in props from your store, you could do this:
+	 *
+	*         stateHelper = mediaHelper(
+	 *          () => this.props.mediaState,
+	 *          (state) => this.props.dispatch({type: 'MEDIA_PLAYER_UPDATE', payload: state})
+	 *        );
+	 *
+	 *      And then you could have other connected components that
+	 */
+
+	function mediaHelper(getStateOrComponent, setState) {
+	  var getState = void 0;
+	  if (typeof getStateOrComponent === 'function') {
+	    getState = getStateOrComponent;
+	    if (typeof setState !== 'function') {
+	      throw Error("If you are passing in a getState function, please also pass in setState.");
+	    }
+	  } else if (getStateOrComponent.isReactComponent) {
+	    (function () {
+	      var reactComponent = getStateOrComponent;
+	      setState = reactComponent.setState.bind(reactComponent);
+	      getState = function getState() {
+	        return reactComponent.state;
+	      };
+	    })();
+	  } else {
+	    throw Error("Invalid getState and setState values, see documentation.");
+	  }
+
+	  return {
+	    togglePlay: function togglePlay() {
+	      return setState({ setPlayback: getState().statPlayback !== 'playing' ? 'playing' : 'paused' });
+	    },
+	    toggleMute: function toggleMute() {
+	      return setState({ setMute: !getState().statMute });
+	    },
+	    get isPlaying() {
+	      return getState().statPlayback === 'playing';
+	    },
+	    play: function play() {
+	      return setState({ setPlayback: 'playing' });
+	    },
+	    pause: function pause() {
+	      return setState({ setPlayback: 'paused' });
+	    },
+	    seekTo: function seekTo(val) {
+	      return setState({ setSeekTo: val });
+	    },
+	    skip: function skip(val) {
+	      return setState({ setSkipTime: val });
+	    },
+	    addVolume: function addVolume(val) {
+	      return setState({ setAddVolume: val });
+	    },
+	    setVolume: function setVolume(val) {
+	      return setState({ setVolume: val });
+	    },
+	    fullscreen: function fullscreen() {
+	      return setState({ setFullscreen: true });
+	    },
+	    get state() {
+	      return getState();
+	    },
+	    toPlayerProps: function toPlayerProps() {
+	      return _extends({}, _Player2.default.extractPropsFromMediaState(getState()), {
+	        mediaStateGetter: getState,
+	        mediaStateSetter: setState
+	      });
+	    }
+	  };
+	}
 
 /***/ },
 /* 4 */
@@ -369,76 +268,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _react = __webpack_require__(2);
-
-	exports.default = {
-	  media: _react.PropTypes.object,
-	  _mediaSetters: _react.PropTypes.object,
-	  _mediaGetters: _react.PropTypes.object
-	};
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function () {
-	  var names = ['requestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen', 'webkitRequestFullscreen'];
-	  return names.reduce(function (prev, curr) {
-	    return document.documentElement[curr] ? curr : prev;
-	  });
-	};
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function () {
-	  var names = ['exitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen', 'webkitExitFullscreen'];
-	  return names.reduce(function (prev, curr) {
-	    return document[curr] ? curr : prev;
-	  });
-	};
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = fullscreenChange;
-	function fullscreenChange(type, callback) {
-	  var vendors = ['fullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange', 'webkitfullscreenchange'];
-	  vendors.forEach(function (vendor) {
-	    return document[type + 'EventListener'](vendor, callback);
-	  });
-	}
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -446,17 +280,35 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _contextTypes = __webpack_require__(4);
+	var _reactDom = __webpack_require__(5);
 
-	var _contextTypes2 = _interopRequireDefault(_contextTypes);
+	var _shallowequal = __webpack_require__(6);
 
-	var _getVendor2 = __webpack_require__(9);
+	var _shallowequal2 = _interopRequireDefault(_shallowequal);
+
+	var _getVendor2 = __webpack_require__(11);
 
 	var _getVendor3 = _interopRequireDefault(_getVendor2);
 
+	var _fullscreenChange = __webpack_require__(20);
+
+	var _fullscreenChange2 = _interopRequireDefault(_fullscreenChange);
+
+	var _requestFullscreen = __webpack_require__(21);
+
+	var _requestFullscreen2 = _interopRequireDefault(_requestFullscreen);
+
+	var _exitFullscreen = __webpack_require__(22);
+
+	var _exitFullscreen2 = _interopRequireDefault(_exitFullscreen);
+
+	var _pickByKey = __webpack_require__(23);
+
+	var _pickByKey2 = _interopRequireDefault(_pickByKey);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -478,159 +330,146 @@ return /******/ (function(modules) { // webpackBootstrap
 	      args[_key] = arguments[_key];
 	    }
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Player.__proto__ || Object.getPrototypeOf(Player)).call.apply(_ref, [this].concat(args))), _this), _this._defaultsSet = false, _this._setPlayer = function (component) {
-	      _this.context._mediaSetters.setPlayer(component);
-	      _this._component = component;
-	    }, _this._setLoading = function (isLoading) {
-	      _this.context._mediaSetters.setPlayerState({ isLoading: isLoading });
-	    }, _this._handleOnReady = function () {
-	      var _this$context = _this.context,
-	          media = _this$context.media,
-	          _mediaSetters = _this$context._mediaSetters;
-	      var _this$props = _this.props,
-	          autoPlay = _this$props.autoPlay,
-	          onReady = _this$props.onReady,
-	          startTime = _this$props.startTime;
-
-
-	      media.setVolume(media.volume);
-	      media.mute(media.isMuted);
-
-	      if (!_this._defaultsSet) {
-	        _this._setDefaults();
-	      }
-	      if (startTime > -1 && media.currentTime != startTime) {
-	        media.seekTo(startTime);
-	        if (!autoPlay) {
-	          media.pause(); // seekTo when onReady causes to start playing.
-	        }
-	      }
-
-	      if (autoPlay) {
-	        media.play();
-	      }
-
-	      _this._setLoading(false);
-
-	      if (typeof onReady === 'function') {
-	        onReady(media);
-	      }
-	    }, _this._handleOnEnded = function () {
-	      var _this$context2 = _this.context,
-	          media = _this$context2.media,
-	          _mediaSetters = _this$context2._mediaSetters;
-	      var _this$props2 = _this.props,
-	          loop = _this$props2.loop,
-	          onEnded = _this$props2.onEnded,
-	          startTime = _this$props2.startTime;
-
-
-	      if (loop) {
-	        media.seekTo(startTime);
-	        media.play();
-	      } else {
-	        _mediaSetters.setPlayerState({ isPlaying: false });
-	      }
-
-	      if (typeof onEnded === 'function') {
-	        onEnded(media);
-	      }
-	    }, _this._handleOnTimeUpdate = function (currentTime) {
-	      var _mediaGetters = _this.context._mediaGetters;
-	      var endTime = _this.props.endTime;
-
-
-	      _mediaGetters.getPlayerEvents.onTimeUpdate(currentTime);
-
-	      if (endTime > -1 && currentTime > endTime) {
-	        _this._handleOnEnded();
-	      }
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Player.__proto__ || Object.getPrototypeOf(Player)).call.apply(_ref, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
 	  _createClass(Player, [{
+	    key: 'setMediaState',
+
+
+	    // Doing the React convention here (e.g. this.state, but this.setState)
+	    value: function setMediaState(state) {
+	      return this.props.mediaStateSetter ? this.props.mediaStateSetter(state) : this.setState(state);
+	    }
+	  }, {
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
-	      this._setPlayerProps(this.props);
-
 	      // we need to unset the loading state if no source was loaded
-	      if (!this.props.src) {
-	        this._setLoading(false);
+	      if (this.props.src) {
+	        this.componentCallbacks.onLoad();
+	      }
+
+	      // Ensure all the media state defaults are on the actual state object.
+	      var mediaState = this.mediaState;
+	      var newMediaState = Object.assign({}, Player.defaultMediaState, mediaState);
+
+	      if (!(0, _shallowequal2.default)(mediaState, newMediaState)) {
+	        this.setMediaState(newMediaState);
+	      }
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      (0, _fullscreenChange2.default)('add', this._handleFullscreenChange);
+	      this._performMediaActionsOnReady = this._performMediaActions.bind(this, this.mediaState);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      (0, _fullscreenChange2.default)('remove', this._handleFullscreenChange);
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps) {
+	      if (this._performMediaActions(nextProps, this.props)) {
+	        // Don't update component since we really just need to run some javascript functions controlling the player.
+	        return false;
+	      } else {
+	        return true;
 	      }
 	    }
 	  }, {
 	    key: 'componentWillUpdate',
 	    value: function componentWillUpdate(nextProps) {
-	      this._setPlayerProps(nextProps);
-
-	      // clean state if the media source has changed
-	      if (this.props.src !== nextProps.src) {
-	        this.context._mediaSetters.setPlayerState({
-	          currentTime: 0,
-	          progress: 0,
-	          duration: 0,
-	          isLoading: true,
-	          isPlaying: false
-	        });
+	      // Clean state if the media source has changed
+	      if (this._videoParamsNotEqual(this.props, nextProps)) {
+	        this.setMediaState((0, _pickByKey2.default)(Player.defaultMediaState, function (key) {
+	          return key.substr(0, 4) === 'stat';
+	        }));
 	      }
 	    }
 	  }, {
-	    key: '_setPlayerProps',
-	    value: function _setPlayerProps(props) {
-	      this.context._mediaSetters.setPlayerProps(props);
+	    key: '_videoParamsNotEqual',
+	    value: function _videoParamsNotEqual(paramsA, paramsB) {
+	      return paramsA.src !== paramsB.src || paramsA.startSeconds !== paramsB.startSeconds || paramsA.endSeconds !== paramsB.endSeconds;
 	    }
 	  }, {
-	    key: '_setDefaults',
-	    value: function _setDefaults() {
-	      var media = this.context.media;
-	      var _props = this.props,
-	          defaultVolume = _props.defaultVolume,
-	          defaultMuted = _props.defaultMuted;
+	    key: '_performMediaActions',
 
 
-	      media.setVolume(defaultVolume);
-	      media.mute(defaultMuted);
+	    // Detects changes in the incoming props and performs the corresponding operation.
+	    value: function _performMediaActions(newProps) {
+	      var _this2 = this;
 
-	      this._defaultsSet = true;
+	      var lastProps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	      var actionPerformed = false;
+
+	      [['seekTo', 'number'], ['skipTime', 'number'], ['volume', 'number'], ['addVolume', 'number'], ['playback', 'string'], ['mute', 'boolean'], ['fullscreen', 'boolean']].forEach(function (args) {
+	        var _args = _slicedToArray(args, 2),
+	            actionName = _args[0],
+	            varType = _args[1];
+
+	        var setterName = 'set' + actionName.charAt(0).toUpperCase() + actionName.slice(1); // ie seekTo => setSeekTo
+	        var newPropValue = newProps[setterName];
+
+	        if ((typeof newPropValue === 'undefined' ? 'undefined' : _typeof(newPropValue)) === varType && lastProps[setterName] !== newPropValue) {
+	          actionPerformed = true;
+	          _this2._debug('Performing action ' + actionName + ': ', newPropValue);
+	          _this2.componentSetters[actionName](newPropValue); // execute the action!
+	          _this2.setMediaState(_defineProperty({}, setterName, null)); // clear it out from the state since we executed it!
+	        }
+	      });
+
+	      return actionPerformed;
 	    }
+
+	    // These simply call the commands on the _component.. They do not initiate callbacks, or update the state.
+	    // These are triggered by passed down props.
+
+
+	    // Component callbacks are responsible for updating all the mediaState 'stat*" keys AND running the passed in callbacks
+	    // from the user.
+
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props2 = this.props,
-	          src = _props2.src,
-	          _vendor = _props2.vendor,
-	          autoPlay = _props2.autoPlay,
-	          onReady = _props2.onReady,
-	          onEnded = _props2.onEnded,
-	          onTimeUpdate = _props2.onTimeUpdate,
-	          defaultCurrentTime = _props2.defaultCurrentTime,
-	          defaultVolume = _props2.defaultVolume,
-	          defaultMuted = _props2.defaultMuted,
-	          startTime = _props2.startTime,
-	          endTime = _props2.endTime,
-	          extraProps = _objectWithoutProperties(_props2, ['src', 'vendor', 'autoPlay', 'onReady', 'onEnded', 'onTimeUpdate', 'defaultCurrentTime', 'defaultVolume', 'defaultMuted', 'startTime', 'endTime']);
+	      var _props = this.props,
+	          src = _props.src,
+	          _vendor = _props.vendor,
+	          autoPlay = _props.autoPlay,
+	          startTime = _props.startTime,
+	          endTime = _props.endTime,
+	          extraProps = _props.extraProps;
 
 	      var _getVendor = (0, _getVendor3.default)(src, _vendor),
 	          vendor = _getVendor.vendor,
 	          component = _getVendor.component;
 
+	      this._vendor = vendor;
+
 	      return (0, _react.createElement)(component, _extends({
-	        ref: this._setPlayer,
-	        src: src,
-	        vendor: vendor,
-	        autoPlay: autoPlay,
-	        isLoading: this._setLoading,
-	        onReady: this._handleOnReady,
-	        onEnded: this._handleOnEnded,
+	        ref: this._setComponent
+	      }, { src: src, vendor: vendor, autoPlay: autoPlay, startTime: startTime, endTime: endTime }, this.componentCallbacks, {
 	        extraProps: extraProps
-	      }, this.context._mediaGetters.getPlayerEvents, {
-	        onTimeUpdate: this._handleOnTimeUpdate
 	      }));
+	    }
+	  }, {
+	    key: 'mediaState',
+	    get: function get() {
+	      return this.props.mediaStateGetter ? this.props.mediaStateGetter() : this.state;
 	    }
 	  }, {
 	    key: 'instance',
 	    get: function get() {
 	      return this._component && this._component.instance;
+	    }
+	  }], [{
+	    key: 'extractPropsFromMediaState',
+	    value: function extractPropsFromMediaState(mediaState) {
+	      return (0, _pickByKey2.default)(mediaState, function (key) {
+	        return key.substr(0, 3) === 'set';
+	      });
 	    }
 	  }]);
 
@@ -639,22 +478,1149 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Player.propTypes = {
 	  vendor: _react.PropTypes.oneOf(['video', 'audio', 'youtube', 'vimeo']),
+	  src: _react.PropTypes.string,
+	  autoPlay: _react.PropTypes.bool,
+	  loop: _react.PropTypes.bool,
 	  startTime: _react.PropTypes.number,
 	  endTime: _react.PropTypes.number,
-	  defaultVolume: _react.PropTypes.number,
-	  defaultMuted: _react.PropTypes.bool
+	  debugMode: _react.PropTypes.bool,
+	  extraProps: _react.PropTypes.object,
+
+	  // == Start Callbacks ==
+	  onReady: _react.PropTypes.func,
+
+	  onDuration: _react.PropTypes.func,
+	  onTimeUpdate: _react.PropTypes.func,
+	  onProgress: _react.PropTypes.func,
+
+	  onLoad: _react.PropTypes.func,
+	  onPlay: _react.PropTypes.func,
+	  onPause: _react.PropTypes.func,
+	  onEnd: _react.PropTypes.func, // Can be triggered automatically by player when video ends OR by stopping the video manually.
+	  onError: _react.PropTypes.func,
+
+	  onMute: _react.PropTypes.func,
+	  onVolumeChange: _react.PropTypes.func,
+	  // == End Callbacks ==
+
+
+	  // Media State
+	  // Note: statCurrentTime, statProgress, statDuration cannot be passed in
+	  // as props since they bubble up from the "component" in render.
+	  // Must passed in 'last_' through props to actually get these states changed.
+	  setSeekTo: _react.PropTypes.number,
+	  setSkipTime: _react.PropTypes.number,
+	  setPlayback: _react.PropTypes.oneOf(['playing', 'paused']),
+	  setVolume: _react.PropTypes.number,
+	  setAddVolume: _react.PropTypes.number,
+	  setMute: _react.PropTypes.bool,
+	  setFullscreen: _react.PropTypes.bool,
+
+	  // The getters and setters of the state is dependent on the object being passed in. If nothing is passed,
+	  // defaults to just using the state on the Player object itself.
+	  mediaStateGetter: _react.PropTypes.func,
+	  mediaStateSetter: _react.PropTypes.func
 	};
-	Player.defaultProps = {
-	  startTime: 0,
-	  endTime: -1,
-	  defaultVolume: 1,
-	  defaultMuted: false
+	Player.defaultMediaState = {
+	  // These must be passed in through props in order to initiate a state change. Changes to these will trigger actions.
+	  setSeekTo: null,
+	  setSkipTime: null,
+	  setPlayback: 'paused',
+	  setVolume: 1,
+	  setAddVolume: null,
+	  setMute: false,
+	  setFullscreen: null, // if set it to false, then will it will try to get ourselves out of fullscreen mode
+
+	  // These are collected from the _components callbacks. Changes to these values, will *not* trigger any actions.
+	  // They only get updated after the actions have confirmed and happened by the components.
+	  statCurrentTime: 0,
+	  statProgress: 0,
+	  statDuration: 0.1,
+	  statPlayback: 'unstarted', // can be on of ['unstarted', 'loading', 'playing', 'paused', 'ended', 'errored']
+	  statVolume: 1, // should be same as default for setVolume - combination of calls to setAddVolume and setVolume
+	  statMute: false, // should be same as default for setMute
+	  statFullscreen: false };
+	Player.defaultProps = Object.assign({
+	  extraProps: {},
+	  debugMode: false
+	}, Player.extractPropsFromMediaState(Player.defaultMediaState));
+
+	var _initialiseProps = function _initialiseProps() {
+	  var _this3 = this;
+
+	  this._performMediaActionsOnReady = null;
+
+	  this._setComponent = function (component) {
+	    return _this3._component = component;
+	  };
+
+	  this._debug = function () {
+	    if (_this3.props.debugMode) {
+	      var _console;
+
+	      (_console = console).log.apply(_console, arguments);
+	    }
+	  };
+
+	  this.componentSetters = {
+	    mute: function mute(setMute) {
+	      return _this3._component.mute(setMute);
+	    },
+	    volume: function volume(_volume) {
+	      return _this3._component.setVolume(_volume);
+	    },
+	    seekTo: function seekTo(currentTime) {
+	      return _this3._component.seekTo(currentTime);
+	    },
+	    playback: function playback(_playback) {
+	      switch (_playback) {
+	        case 'playing':
+	          _this3._component.play();
+	          break;
+	        case 'paused':
+	          _this3._component.pause();
+	          break;
+	        case 'ended':
+	          _this3._component.end();
+	          break;
+	      }
+	    },
+	    skipTime: function skipTime(amount) {
+	      var _mediaState = _this3.mediaState,
+	          statCurrentTime = _mediaState.statCurrentTime,
+	          statDuration = _mediaState.statDuration;
+
+	      var newTime = statCurrentTime + amount;
+
+	      if (newTime < 0) {
+	        newTime = 0;
+	      } else if (newTime > statDuration) {
+	        newTime = statDuration;
+	      }
+
+	      _this3._component.seekTo(newTime);
+	    },
+	    addVolume: function addVolume(amount) {
+	      var newVolume = _this3.mediaState.statVolume + amount * 0.01;
+
+	      if (newVolume < 0) {
+	        newVolume = 0;
+	      } else if (newVolume > 1) {
+	        newVolume = 1;
+	      }
+
+	      _this3._component.setVolume(newVolume);
+	    },
+	    fullscreen: function fullscreen(setFullscreen) {
+	      if (setFullscreen) {
+	        (0, _reactDom.findDOMNode)(_this3._component)[(0, _requestFullscreen2.default)()]();
+	      } else {
+	        document[(0, _exitFullscreen2.default)()]();
+	      }
+	    }
+	  };
+
+	  this._handleFullscreenChange = function (_ref2) {
+	    var target = _ref2.target;
+
+	    if (target === (0, _reactDom.findDOMNode)(_this3._component)) {
+	      // currently no callbacks from fullscreen, but can be easily added here.
+	      _this3.setMediaState({ statFullscreen: !_this3.mediaState.statFullscreen });
+	    }
+	  };
+
+	  this.componentCallbacks = {
+	    onReady: function onReady() {
+	      var _props2 = _this3.props,
+	          autoPlay = _props2.autoPlay,
+	          onReady = _props2.onReady,
+	          startTime = _props2.startTime;
+
+
+	      if (_this3._performMediaActionsOnReady) {
+	        _this3._performMediaActionsOnReady();
+	        _this3._performMediaActionsOnReady = null;
+	      }
+
+	      // Youtube support start and end times through the api.
+	      if (_this3._vendor !== 'youtube') {
+	        if (startTime && _this3.mediaState.statCurrentTime !== startTime) {
+	          // seekTo when onReady causes to start playing. It should respect the parameters provided here, so
+	          // we ensure it actually remains paused.
+	          _this3._disableCallbacks = true;
+	          _this3._component.seekTo(startTime);
+	          if (!autoPlay) {
+	            _this3._component.pause();
+	          }
+	          _this3._disableCallbacks = false;
+	        }
+	      }
+
+	      if (autoPlay) {
+	        _this3._component.play();
+	      }
+	    },
+
+	    onDuration: function onDuration(statDuration) {
+	      return _this3._updateStatAndRunCallback({ statDuration: statDuration }, 'onDuration', statDuration);
+	    },
+	    onTimeUpdate: function onTimeUpdate(statCurrentTime) {
+	      var endTime = _this3.props.endTime;
+
+
+	      _this3._updateStatAndRunCallback({ statCurrentTime: statCurrentTime }, 'onTimeUpdate', statCurrentTime);
+
+	      if (_this3._vendor !== 'youtube') {
+	        // @Aryk: Added 0.1 to anticipate the next keyframe
+	        if (endTime && statCurrentTime + 0.1 > endTime) {
+	          // @Aryk: For Youtube, stop() will also trigger onEnd, but
+	          // we have Youtube as an exception, so we are ok here.
+	          _this3._component.end(); // will trigger onEnd callbacks
+	        }
+	      }
+	    },
+	    onProgress: function onProgress(statProgress) {
+	      // @Aryk: If it is not "statProgressing" we do not trigger the callbacks. This is specifically
+	      // important for Youtube because the youtube API will trigger a BUFFERING if you seekTo on a "cued" video.
+	      // We cannot simply break the requestAnimationFrame loop, because it's possible you are on a bad
+	      // internet connection and are not receiving new data, so we must let this loop continue.
+	      // Putting this on the Player level allows this behavior to apply to other sources like Vimeo
+	      // as well and provides for consistent treatment.
+	      if (_this3._lastStateProgress === undefined || statProgress > _this3._lastStateProgress) {
+	        _this3._updateStatAndRunCallback({ statProgress: statProgress }, 'onProgress', statProgress);
+	      }
+
+	      _this3._lastStateProgress = statProgress;
+	    },
+
+	    onLoad: function onLoad() {
+	      return _this3._updateStatAndRunCallback({ statPlayback: 'loading' }, 'onLoad');
+	    },
+	    onPlay: function onPlay() {
+	      return _this3._updateStatAndRunCallback({ statPlayback: 'playing' }, 'onPlay');
+	    },
+	    onPause: function onPause() {
+	      return _this3._updateStatAndRunCallback({ statPlayback: 'paused' }, 'onPause');
+	    },
+	    onEnd: function onEnd() {
+	      var _props3 = _this3.props,
+	          loop = _props3.loop,
+	          onEnd = _props3.onEnd,
+	          startTime = _props3.startTime;
+
+
+	      _this3._updateStatAndRunCallback({ statPlayback: 'ended' }, 'onEnd');
+
+	      if (loop) {
+	        if (startTime) {
+	          _this3._component.seekTo(startTime);
+	        }
+	        _this3._component.play();
+	      }
+	    },
+
+	    onMute: function onMute(isMuted) {
+	      return _this3._updateStatAndRunCallback({ statMute: isMuted }, 'onMute', isMuted);
+	    },
+	    onVolumeChange: function onVolumeChange(volume) {
+	      return _this3._updateStatAndRunCallback({ statVolume: volume }, 'onVolumeChange', volume);
+	    },
+	    onError: function onError(error) {
+	      return _this3._updateStatAndRunCallback({ statPlayback: 'errored' }, 'onError', error);
+	    }
+	  };
+
+	  this._updateStatAndRunCallback = function (statUpdate, callbackName) {
+	    for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+	      args[_key2 - 2] = arguments[_key2];
+	    }
+
+	    var showDebug = _this3.props.debugMode && !['onTimeUpdate', 'onProgress'].includes(callbackName);
+
+	    if (statUpdate) {
+	      showDebug && _this3._debug('Updating Media State (' + callbackName + '): ', statUpdate);
+	      _this3.setMediaState(statUpdate);
+	    }
+
+	    var callback = _this3.props[callbackName];
+	    if (typeof callback === 'function' && !_this3._disableCallbacks) {
+	      showDebug && _this3._debug('Performing Callback (' + callbackName + '): ', statUpdate);
+	      callback.apply(undefined, args);
+	    }
+	  };
 	};
-	Player.contextTypes = _contextTypes2.default;
+
 	exports.default = Player;
 
 /***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var fetchKeys = __webpack_require__(7);
+
+	module.exports = function shallowEqual(objA, objB, compare, compareContext) {
+
+	    var ret = compare ? compare.call(compareContext, objA, objB) : void 0;
+
+	    if (ret !== void 0) {
+	        return !!ret;
+	    }
+
+	    if (objA === objB) {
+	        return true;
+	    }
+
+	    if ((typeof objA === 'undefined' ? 'undefined' : _typeof(objA)) !== 'object' || objA === null || (typeof objB === 'undefined' ? 'undefined' : _typeof(objB)) !== 'object' || objB === null) {
+	        return false;
+	    }
+
+	    var keysA = fetchKeys(objA);
+	    var keysB = fetchKeys(objB);
+
+	    var len = keysA.length;
+	    if (len !== keysB.length) {
+	        return false;
+	    }
+
+	    compareContext = compareContext || null;
+
+	    // Test for A's keys different from B.
+	    var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
+	    for (var i = 0; i < len; i++) {
+	        var key = keysA[i];
+	        if (!bHasOwnProperty(key)) {
+	            return false;
+	        }
+	        var valueA = objA[key];
+	        var valueB = objB[key];
+
+	        var _ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
+	        if (_ret === false || _ret === void 0 && valueA !== valueB) {
+	            return false;
+	        }
+	    }
+
+	    return true;
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	/**
+	 * lodash 3.1.2 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+	var getNative = __webpack_require__(8),
+	    isArguments = __webpack_require__(9),
+	    isArray = __webpack_require__(10);
+
+	/** Used to detect unsigned integer values. */
+	var reIsUint = /^\d+$/;
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeKeys = getNative(Object, 'keys');
+
+	/**
+	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+	 * of an array-like value.
+	 */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseProperty(key) {
+	  return function (object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+
+	/**
+	 * Gets the "length" property value of `object`.
+	 *
+	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {*} Returns the "length" value.
+	 */
+	var getLength = baseProperty('length');
+
+	/**
+	 * Checks if `value` is array-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 */
+	function isArrayLike(value) {
+	  return value != null && isLength(getLength(value));
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like index.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+	 */
+	function isIndex(value, length) {
+	  value = typeof value == 'number' || reIsUint.test(value) ? +value : -1;
+	  length = length == null ? MAX_SAFE_INTEGER : length;
+	  return value > -1 && value % 1 == 0 && value < length;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * A fallback implementation of `Object.keys` which creates an array of the
+	 * own enumerable property names of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 */
+	function shimKeys(object) {
+	  var props = keysIn(object),
+	      propsLength = props.length,
+	      length = propsLength && object.length;
+
+	  var allowIndexes = !!length && isLength(length) && (isArray(object) || isArguments(object));
+
+	  var index = -1,
+	      result = [];
+
+	  while (++index < propsLength) {
+	    var key = props[index];
+	    if (allowIndexes && isIndex(key, length) || hasOwnProperty.call(object, key)) {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Creates an array of the own enumerable property names of `object`.
+	 *
+	 * **Note:** Non-object values are coerced to objects. See the
+	 * [ES spec](http://ecma-international.org/ecma-262/6.0/#sec-object.keys)
+	 * for more details.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 *   this.b = 2;
+	 * }
+	 *
+	 * Foo.prototype.c = 3;
+	 *
+	 * _.keys(new Foo);
+	 * // => ['a', 'b'] (iteration order is not guaranteed)
+	 *
+	 * _.keys('hi');
+	 * // => ['0', '1']
+	 */
+	var keys = !nativeKeys ? shimKeys : function (object) {
+	  var Ctor = object == null ? undefined : object.constructor;
+	  if (typeof Ctor == 'function' && Ctor.prototype === object || typeof object != 'function' && isArrayLike(object)) {
+	    return shimKeys(object);
+	  }
+	  return isObject(object) ? nativeKeys(object) : [];
+	};
+
+	/**
+	 * Creates an array of the own and inherited enumerable property names of `object`.
+	 *
+	 * **Note:** Non-object values are coerced to objects.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Object
+	 * @param {Object} object The object to query.
+	 * @returns {Array} Returns the array of property names.
+	 * @example
+	 *
+	 * function Foo() {
+	 *   this.a = 1;
+	 *   this.b = 2;
+	 * }
+	 *
+	 * Foo.prototype.c = 3;
+	 *
+	 * _.keysIn(new Foo);
+	 * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
+	 */
+	function keysIn(object) {
+	  if (object == null) {
+	    return [];
+	  }
+	  if (!isObject(object)) {
+	    object = Object(object);
+	  }
+	  var length = object.length;
+	  length = length && isLength(length) && (isArray(object) || isArguments(object)) && length || 0;
+
+	  var Ctor = object.constructor,
+	      index = -1,
+	      isProto = typeof Ctor == 'function' && Ctor.prototype === object,
+	      result = Array(length),
+	      skipIndexes = length > 0;
+
+	  while (++index < length) {
+	    result[index] = index + '';
+	  }
+	  for (var key in object) {
+	    if (!(skipIndexes && isIndex(key, length)) && !(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {
+	      result.push(key);
+	    }
+	  }
+	  return result;
+	}
+
+	module.exports = keys;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	/**
+	 * lodash 3.9.1 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** `Object#toString` result references. */
+	var funcTag = '[object Function]';
+
+	/** Used to detect host constructors (Safari > 5). */
+	var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+	/**
+	 * Checks if `value` is object-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 */
+	function isObjectLike(value) {
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+	}
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var fnToString = Function.prototype.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/** Used to detect if a method is native. */
+	var reIsNative = RegExp('^' + fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
+
+	/**
+	 * Gets the native function at `key` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {string} key The key of the method to get.
+	 * @returns {*} Returns the function if it's native, else `undefined`.
+	 */
+	function getNative(object, key) {
+	  var value = object == null ? undefined : object[key];
+	  return isNative(value) ? value : undefined;
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in older versions of Chrome and Safari which return 'function' for regexes
+	  // and Safari 8 equivalents which return 'object' for typed array constructors.
+	  return isObject(value) && objToString.call(value) == funcTag;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is a native function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @example
+	 *
+	 * _.isNative(Array.prototype.push);
+	 * // => true
+	 *
+	 * _.isNative(_);
+	 * // => false
+	 */
+	function isNative(value) {
+	  if (value == null) {
+	    return false;
+	  }
+	  if (isFunction(value)) {
+	    return reIsNative.test(fnToString.call(value));
+	  }
+	  return isObjectLike(value) && reIsHostCtor.test(value);
+	}
+
+	module.exports = getNative;
+
+/***/ },
 /* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	/**
+	 * lodash (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+	 * Released under MIT license <https://lodash.com/license>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 */
+
+	/** Used as references for various `Number` constants. */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]',
+	    funcTag = '[object Function]',
+	    genTag = '[object GeneratorFunction]';
+
+	/** Used for built-in method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the
+	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objectToString = objectProto.toString;
+
+	/** Built-in value references. */
+	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+	/**
+	 * Checks if `value` is likely an `arguments` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isArguments(function() { return arguments; }());
+	 * // => true
+	 *
+	 * _.isArguments([1, 2, 3]);
+	 * // => false
+	 */
+	function isArguments(value) {
+	  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+	  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') && (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+	}
+
+	/**
+	 * Checks if `value` is array-like. A value is considered array-like if it's
+	 * not a function and has a `value.length` that's an integer greater than or
+	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLike(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLike('abc');
+	 * // => true
+	 *
+	 * _.isArrayLike(_.noop);
+	 * // => false
+	 */
+	function isArrayLike(value) {
+	  return value != null && isLength(value.length) && !isFunction(value);
+	}
+
+	/**
+	 * This method is like `_.isArrayLike` except that it also checks if `value`
+	 * is an object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an array-like object,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.isArrayLikeObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject('abc');
+	 * // => false
+	 *
+	 * _.isArrayLikeObject(_.noop);
+	 * // => false
+	 */
+	function isArrayLikeObject(value) {
+	  return isObjectLike(value) && isArrayLike(value);
+	}
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in Safari 8-9 which returns 'object' for typed array and other constructors.
+	  var tag = isObject(value) ? objectToString.call(value) : '';
+	  return tag == funcTag || tag == genTag;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This method is loosely based on
+	 * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 * @example
+	 *
+	 * _.isLength(3);
+	 * // => true
+	 *
+	 * _.isLength(Number.MIN_VALUE);
+	 * // => false
+	 *
+	 * _.isLength(Infinity);
+	 * // => false
+	 *
+	 * _.isLength('3');
+	 * // => false
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is the
+	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+	}
+
+	module.exports = isArguments;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	/**
+	 * lodash 3.0.4 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modern modularize exports="npm" -o ./`
+	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Available under MIT license <https://lodash.com/license>
+	 */
+
+	/** `Object#toString` result references. */
+	var arrayTag = '[object Array]',
+	    funcTag = '[object Function]';
+
+	/** Used to detect host constructors (Safari > 5). */
+	var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+	/**
+	 * Checks if `value` is object-like.
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 */
+	function isObjectLike(value) {
+	  return !!value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) == 'object';
+	}
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/** Used to resolve the decompiled source of functions. */
+	var fnToString = Function.prototype.toString;
+
+	/** Used to check objects for own properties. */
+	var hasOwnProperty = objectProto.hasOwnProperty;
+
+	/**
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/** Used to detect if a method is native. */
+	var reIsNative = RegExp('^' + fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&').replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$');
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeIsArray = getNative(Array, 'isArray');
+
+	/**
+	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
+	 * of an array-like value.
+	 */
+	var MAX_SAFE_INTEGER = 9007199254740991;
+
+	/**
+	 * Gets the native function at `key` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {string} key The key of the method to get.
+	 * @returns {*} Returns the function if it's native, else `undefined`.
+	 */
+	function getNative(object, key) {
+	  var value = object == null ? undefined : object[key];
+	  return isNative(value) ? value : undefined;
+	}
+
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @private
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+
+	/**
+	 * Checks if `value` is classified as an `Array` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArray([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArray(function() { return arguments; }());
+	 * // => false
+	 */
+	var isArray = nativeIsArray || function (value) {
+	  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
+	};
+
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in older versions of Chrome and Safari which return 'function' for regexes
+	  // and Safari 8 equivalents which return 'object' for typed array constructors.
+	  return isObject(value) && objToString.call(value) == funcTag;
+	}
+
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(1);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+	  return !!value && (type == 'object' || type == 'function');
+	}
+
+	/**
+	 * Checks if `value` is a native function.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+	 * @example
+	 *
+	 * _.isNative(Array.prototype.push);
+	 * // => true
+	 *
+	 * _.isNative(_);
+	 * // => false
+	 */
+	function isNative(value) {
+	  if (value == null) {
+	    return false;
+	  }
+	  if (isFunction(value)) {
+	    return reIsNative.test(fnToString.call(value));
+	  }
+	  return isObjectLike(value) && reIsHostCtor.test(value);
+	}
+
+	module.exports = isArray;
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -664,15 +1630,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.default = getVendor;
 
-	var _HTML = __webpack_require__(10);
+	var _HTML = __webpack_require__(12);
 
 	var _HTML2 = _interopRequireDefault(_HTML);
 
-	var _Vimeo = __webpack_require__(12);
+	var _Vimeo = __webpack_require__(14);
 
 	var _Vimeo2 = _interopRequireDefault(_Vimeo);
 
-	var _Youtube = __webpack_require__(14);
+	var _Youtube = __webpack_require__(16);
 
 	var _Youtube2 = _interopRequireDefault(_Youtube);
 
@@ -692,7 +1658,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -709,7 +1675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _vendorPropTypes = __webpack_require__(11);
+	var _vendorPropTypes = __webpack_require__(13);
 
 	var _vendorPropTypes2 = _interopRequireDefault(_vendorPropTypes);
 
@@ -737,22 +1703,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      args[_key] = arguments[_key];
 	    }
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = HTML5.__proto__ || Object.getPrototypeOf(HTML5)).call.apply(_ref, [this].concat(args))), _this), _this._isLoading = function () {
-	      _this.props.isLoading(true);
-	    }, _this._isNotLoading = function () {
-	      _this.props.isLoading(false);
-	    }, _this._handleCanPlay = function () {
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = HTML5.__proto__ || Object.getPrototypeOf(HTML5)).call.apply(_ref, [this].concat(args))), _this), _this._handleCanPlay = function () {
 	      _this.props.onReady();
 	    }, _this._handlePlay = function () {
-	      _this.props.onPlay(true);
-	      _this._isNotLoading();
+	      _this.props.onPlay();
 	    }, _this._handlePause = function () {
-	      _this.props.onPause(false);
+	      _this.props.onPause();
 	    }, _this._handleEnded = function () {
-	      _this.props.onEnded(false);
+	      _this.props.onEnd();
 	    }, _this._handleError = function (e) {
 	      _this.props.onError(e);
-	      _this._isNotLoading();
 	    }, _this._handleProgress = function (_ref2) {
 	      var _ref2$target = _ref2.target,
 	          buffered = _ref2$target.buffered,
@@ -831,10 +1791,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._player.pause();
 	    }
 	  }, {
-	    key: 'stop',
-	    value: function stop() {
+	    key: 'end',
+	    value: function end() {
 	      this._player.pause();
-	      this._player.currentTime = 0;
+	      this._handleEnded();
 	    }
 	  }, {
 	    key: 'seekTo',
@@ -853,6 +1813,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function setVolume(volume) {
 	      this._player.volume = volume;
 	    }
+
+	    // See https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
+
 	  }, {
 	    key: '_createAudioObject',
 
@@ -864,7 +1827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_destroyAudioObject',
 	    value: function _destroyAudioObject() {
-	      this.stop();
+	      this.pause();
 	      this._player = null;
 	    }
 	  }, {
@@ -919,10 +1882,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return {
 	        onCanPlay: this._handleCanPlay,
 	        onPlay: this._handlePlay,
-	        onPlaying: this._isNotLoading,
+	        // onPlaying: this._isNotLoading,
+	        // onWaiting: this._isLoading,
 	        onPause: this._handlePause,
 	        onEnded: this._handleEnded,
-	        onWaiting: this._isLoading,
 	        onError: this._handleError,
 	        onProgress: this._handleProgress,
 	        onLoadedMetadata: this._handleDuration,
@@ -941,7 +1904,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = HTML5;
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -962,7 +1925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -979,11 +1942,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _getVimeoId = __webpack_require__(13);
+	var _getVimeoId = __webpack_require__(15);
 
 	var _getVimeoId2 = _interopRequireDefault(_getVimeoId);
 
-	var _vendorPropTypes = __webpack_require__(11);
+	var _vendorPropTypes = __webpack_require__(13);
 
 	var _vendorPropTypes2 = _interopRequireDefault(_vendorPropTypes);
 
@@ -1039,13 +2002,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this.props.onTimeUpdate(data.data.seconds);
 	          break;
 	        case 'play':
-	          _this.props.onPlay(true);
+	          _this.props.onPlay();
 	          break;
 	        case 'pause':
-	          _this.props.onPause(false);
+	          _this.props.onPause();
 	          break;
 	        case 'finish':
-	          _this.props.onEnded(false);
+	          _this.props.onEnd();
 	          break;
 	      }
 
@@ -1108,9 +2071,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._postMessage('pause');
 	    }
 	  }, {
-	    key: 'stop',
-	    value: function stop() {
+	    key: 'unload',
+	    value: function unload() {
 	      this._postMessage('unload');
+	    }
+	  }, {
+	    key: 'end',
+	    value: function end() {
+	      this.pause();
+	      this.props.onEnd();
 	    }
 	  }, {
 	    key: 'seekTo',
@@ -1155,7 +2124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Vimeo;
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1177,7 +2146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1194,15 +2163,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _youtubeApiLoader = __webpack_require__(15);
+	var _youtubeApiLoader = __webpack_require__(17);
 
 	var _youtubeApiLoader2 = _interopRequireDefault(_youtubeApiLoader);
 
-	var _getYoutubeId = __webpack_require__(17);
+	var _getYoutubeId = __webpack_require__(19);
 
 	var _getYoutubeId2 = _interopRequireDefault(_getYoutubeId);
 
-	var _vendorPropTypes = __webpack_require__(11);
+	var _vendorPropTypes = __webpack_require__(13);
 
 	var _vendorPropTypes2 = _interopRequireDefault(_vendorPropTypes);
 
@@ -1228,7 +2197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      args[_key] = arguments[_key];
 	    }
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Youtube.__proto__ || Object.getPrototypeOf(Youtube)).call.apply(_ref, [this].concat(args))), _this), _this._videoId = (0, _getYoutubeId2.default)(_this.props.src), _this._lastVideoId = _this._videoId, _this._isReady = false, _this._isMounted = false, _this._progressId = null, _this._timeUpdateId = null, _this._handleProgress = function () {
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Youtube.__proto__ || Object.getPrototypeOf(Youtube)).call.apply(_ref, [this].concat(args))), _this), _this._videoParams = null, _this._lastVideoParams = null, _this._isReady = false, _this._isMounted = false, _this._progressId = null, _this._timeUpdateId = null, _this._handleProgress = function () {
 	      if (!_this._isMounted) return;
 
 	      var progress = _this._player.getVideoLoadedFraction() || 0;
@@ -1258,19 +2227,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
-	      if (nextProps.src !== this.props.src) {
-	        this._lastVideoId = this._videoId;
-	        this._videoId = (0, _getYoutubeId2.default)(nextProps.src);
+	      var nextVideoParams = this._getVideoParams(nextProps);
+	      if (!this._videoParams || this._videoParamsNotEqual(this._videoParams, nextVideoParams)) {
+	        this._registerNewVideoParams(nextVideoParams);
 
 	        if (this._isReady) {
-	          if (nextProps.autoPlay) {
-	            this._player.loadVideoById(this._videoId);
-	          } else {
-	            this._player.cueVideoById(this._videoId);
-	          }
-	          this.props.onReady();
+	          this._cueVideo();
 	        }
 	      }
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this._registerNewVideoParams(this._getVideoParams(this.props));
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -1290,10 +2259,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: '_registerNewVideoParams',
+	    value: function _registerNewVideoParams(videoParams) {
+	      this._lastVideoParams = this._videoParams;
+	      this._videoParams = videoParams;
+	    }
+	  }, {
+	    key: '_videoParamsNotEqual',
+	    value: function _videoParamsNotEqual(paramsA, paramsB) {
+	      return paramsA.videoId !== paramsB.videoId || paramsA.startSeconds !== paramsB.startSeconds || paramsA.endSeconds !== paramsB.endSeconds;
+	    }
+	  }, {
+	    key: '_getVideoParams',
+	    value: function _getVideoParams(props) {
+	      return {
+	        videoId: (0, _getYoutubeId2.default)(props.src),
+	        startSeconds: props.startTime,
+	        endSeconds: props.endTime
+	      };
+	    }
+	  }, {
+	    key: '_cueVideo',
+	    value: function _cueVideo() {
+	      // Autoplay is handled one level up on Player#_handleOnReady.
+	      this._player.cueVideoById(this._videoParams);
+	      this.props.onReady();
+	    }
+	  }, {
 	    key: '_createPlayer',
 	    value: function _createPlayer() {
 	      this._player = new YT.Player(this._node, {
-	        videoId: this._videoId,
 	        events: this._events(),
 	        playerVars: {
 	          controls: 0,
@@ -1309,13 +2304,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      return {
 	        onReady: function onReady() {
-	          // if id changed before the player was ready we need to load the new one
-	          if (_this2._videoId !== _this2._lastVideoId) {
-	            _this2._player.loadVideoById(_this2._videoId);
-	          }
+	          _this2._cueVideo();
 	          _this2._isReady = true;
-	          _this2.props.onDuration(_this2._player.getDuration());
-	          _this2.props.onReady();
 	        },
 	        onStateChange: function onStateChange(_ref2) {
 	          var data = _ref2.data;
@@ -1329,7 +2319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var isPlaying = data === PLAYING;
 
 	          if (isPlaying) {
-	            _this2.props.onPlay(true);
+	            _this2.props.onPlay();
 	            _this2.props.onDuration(_this2._player.getDuration());
 	            _this2._timeUpdateId = requestAnimationFrame(_this2._handleTimeUpdate);
 	          } else {
@@ -1341,14 +2331,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 
 	          if (data === PAUSED) {
-	            _this2.props.onPause(false);
+	            _this2.props.onPause();
 	          }
 
-	          if (data === ENDED) {
-	            _this2.props.onEnded(false);
+	          // Videos loaded back-to-back would be skipped. Bug in the API, so checking for getVideoLoadedFraction()
+	          // Found fix here: http://stackoverflow.com/questions/31510351/youtube-iframe-api-loadvideobyid-skips-the-video.
+	          if (data === ENDED && _this2._player.getVideoLoadedFraction() > 0) {
+	            _this2.props.onEnd();
+	            _this2._onEndCalled = true;
 	          }
 
-	          // start fetching progress when playing or buffering
+	          // start fetching progress when playing or buffering. This is also called when BUFFERING ends
 	          if (isPlaying || data === BUFFERING) {
 	            _this2._progressId = requestAnimationFrame(_this2._handleProgress);
 	          }
@@ -1373,15 +2366,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function pause() {
 	      this._player.pauseVideo();
 	    }
+
+	    // May or may not put the player in an ENDED state after calling stopVideo(), so make sure onEnd is called.
+	    // See https://developers.google.com/youtube/js_api_reference
+
 	  }, {
-	    key: 'stop',
-	    value: function stop() {
+	    key: 'end',
+	    value: function end() {
+	      this._onEndCalled = false;
 	      this._player.stopVideo();
+	      if (!this._onEndCalled) {
+	        this.props.onEnd();
+	        this._onEndCalled = true;
+	      }
 	    }
 	  }, {
 	    key: 'seekTo',
 	    value: function seekTo(currentTime) {
 	      this._player.seekTo(currentTime);
+	      this.props.onTimeUpdate(currentTime);
 	    }
 	  }, {
 	    key: 'mute',
@@ -1424,7 +2427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Youtube;
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1433,7 +2436,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _loadApi = __webpack_require__(16);
+	var _loadApi = __webpack_require__(18);
 
 	var _loadApi2 = _interopRequireDefault(_loadApi);
 
@@ -1473,7 +2476,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1503,7 +2506,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1524,8 +2527,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
+/* 20 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = fullscreenChange;
+	function fullscreenChange(type, callback) {
+	  var vendors = ['fullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange', 'webkitfullscreenchange'];
+	  vendors.forEach(function (vendor) {
+	    return document[type + 'EventListener'](vendor, callback);
+	  });
+	}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
 
 	'use strict';
 
@@ -1533,55 +2553,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	exports.default = function () {
+	  var names = ['requestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen', 'webkitRequestFullscreen'];
+	  return names.reduce(function (prev, curr) {
+	    return document.documentElement[curr] ? curr : prev;
+	  });
+	};
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
 
-	exports.default = withMediaProps;
+	'use strict';
 
-	var _react = __webpack_require__(2);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var _react2 = _interopRequireDefault(_react);
+	exports.default = function () {
+	  var names = ['exitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen', 'webkitExitFullscreen'];
+	  return names.reduce(function (prev, curr) {
+	    return document[curr] ? curr : prev;
+	  });
+	};
 
-	var _contextTypes = __webpack_require__(4);
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
 
-	var _contextTypes2 = _interopRequireDefault(_contextTypes);
+	"use strict";
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function withMediaProps(MediaComponent) {
-	  var _class, _temp;
-
-	  return _temp = _class = function (_Component) {
-	    _inherits(_class, _Component);
-
-	    function _class() {
-	      _classCallCheck(this, _class);
-
-	      return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = pickByKey;
+	function pickByKey(obj, func) {
+	  return Object.keys(obj).reduce(function (newObj, key) {
+	    if (func(key)) {
+	      newObj[key] = obj[key];
 	    }
-
-	    _createClass(_class, [{
-	      key: 'render',
-	      value: function render() {
-	        return _react2.default.createElement(MediaComponent, _extends({}, this.props, {
-	          media: this.context.media
-	        }));
-	      }
-	    }]);
-
-	    return _class;
-	  }(_react.Component), _class.displayName = 'withMediaProps', _class.contextTypes = _contextTypes2.default, _temp;
+	    return newObj;
+	  }, {});
 	}
 
 /***/ },
-/* 19 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1591,35 +2607,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Fullscreen = exports.Volume = exports.MuteUnmute = exports.Duration = exports.SeekBar = exports.Progress = exports.CurrentTime = exports.PlayPause = undefined;
 
-	var _PlayPause2 = __webpack_require__(20);
+	var _PlayPause2 = __webpack_require__(25);
 
 	var _PlayPause3 = _interopRequireDefault(_PlayPause2);
 
-	var _CurrentTime2 = __webpack_require__(21);
+	var _CurrentTime2 = __webpack_require__(26);
 
 	var _CurrentTime3 = _interopRequireDefault(_CurrentTime2);
 
-	var _Progress2 = __webpack_require__(23);
+	var _Progress2 = __webpack_require__(28);
 
 	var _Progress3 = _interopRequireDefault(_Progress2);
 
-	var _SeekBar2 = __webpack_require__(24);
+	var _SeekBar2 = __webpack_require__(29);
 
 	var _SeekBar3 = _interopRequireDefault(_SeekBar2);
 
-	var _Duration2 = __webpack_require__(25);
+	var _Duration2 = __webpack_require__(30);
 
 	var _Duration3 = _interopRequireDefault(_Duration2);
 
-	var _MuteUnmute2 = __webpack_require__(26);
+	var _MuteUnmute2 = __webpack_require__(31);
 
 	var _MuteUnmute3 = _interopRequireDefault(_MuteUnmute2);
 
-	var _Volume2 = __webpack_require__(27);
+	var _Volume2 = __webpack_require__(32);
 
 	var _Volume3 = _interopRequireDefault(_Volume2);
 
-	var _Fullscreen2 = __webpack_require__(28);
+	var _Fullscreen2 = __webpack_require__(33);
 
 	var _Fullscreen3 = _interopRequireDefault(_Fullscreen2);
 
@@ -1635,7 +2651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.Fullscreen = _Fullscreen3.default;
 
 /***/ },
-/* 20 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1649,10 +2665,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1666,35 +2678,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(PlayPause, _Component);
 
 	  function PlayPause() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
 	    _classCallCheck(this, PlayPause);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PlayPause.__proto__ || Object.getPrototypeOf(PlayPause)).call.apply(_ref, [this].concat(args))), _this), _this._handlePlayPause = function () {
-	      _this.props.media.playPause();
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _possibleConstructorReturn(this, (PlayPause.__proto__ || Object.getPrototypeOf(PlayPause)).apply(this, arguments));
 	  }
 
 	  _createClass(PlayPause, [{
 	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(_ref2) {
-	      var media = _ref2.media;
+	    value: function shouldComponentUpdate(_ref) {
+	      var isPlaying = _ref.isPlaying;
 
-	      return this.props.media.isPlaying !== media.isPlaying;
+	      return this.props.isPlaying !== isPlaying;
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props,
+	          isPlaying = _props.isPlaying,
+	          togglePlay = _props.togglePlay,
 	          className = _props.className,
-	          style = _props.style,
-	          media = _props.media;
+	          style = _props.style;
+
 
 	      return _react2.default.createElement(
 	        'button',
@@ -1702,9 +2706,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          type: 'button',
 	          className: className,
 	          style: style,
-	          onClick: this._handlePlayPause
+	          onClick: togglePlay
 	        },
-	        media.isPlaying ? 'Pause' : 'Play'
+	        isPlaying ? 'Pause' : 'Play'
 	      );
 	    }
 	  }]);
@@ -1712,10 +2716,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return PlayPause;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(PlayPause);
+	exports.default = PlayPause;
 
 /***/ },
-/* 21 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1730,11 +2734,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
-
-	var _formatTime = __webpack_require__(22);
+	var _formatTime = __webpack_require__(27);
 
 	var _formatTime2 = _interopRequireDefault(_formatTime);
 
@@ -1758,9 +2758,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(CurrentTime, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(_ref) {
-	      var media = _ref.media;
+	      var currentTime = _ref.currentTime;
 
-	      return this.props.media.currentTime !== media.currentTime;
+	      return this.props.currentTime !== currentTime;
 	    }
 	  }, {
 	    key: 'render',
@@ -1768,12 +2768,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props = this.props,
 	          className = _props.className,
 	          style = _props.style,
-	          media = _props.media;
+	          currentTime = _props.currentTime;
 
 	      return _react2.default.createElement(
 	        'time',
 	        { className: className, style: style },
-	        (0, _formatTime2.default)(media.currentTime)
+	        (0, _formatTime2.default)(currentTime)
 	      );
 	    }
 	  }]);
@@ -1781,10 +2781,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return CurrentTime;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(CurrentTime);
+	exports.default = CurrentTime;
 
 /***/ },
-/* 22 */
+/* 27 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1810,7 +2810,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 23 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1824,10 +2824,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1849,9 +2845,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Progress, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(_ref) {
-	      var media = _ref.media;
+	      var progress = _ref.progress;
 
-	      return this.props.media.progress !== media.progress;
+	      return this.props.progress !== progress;
 	    }
 	  }, {
 	    key: 'render',
@@ -1859,13 +2855,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props = this.props,
 	          className = _props.className,
 	          style = _props.style,
-	          media = _props.media;
+	          progress = _props.progress;
+
 
 	      return _react2.default.createElement('progress', {
 	        className: className,
 	        style: style,
 	        max: 100,
-	        value: media.progress * 100
+	        value: progress * 100
 	      });
 	    }
 	  }]);
@@ -1873,13 +2870,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Progress;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(Progress);
+	exports.default = Progress;
 
 /***/ },
-/* 24 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -1893,10 +2890,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1908,69 +2901,90 @@ return /******/ (function(modules) { // webpackBootstrap
 	var SeekBar = function (_Component) {
 	  _inherits(SeekBar, _Component);
 
-	  function SeekBar() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
+	  function SeekBar(props) {
 	    _classCallCheck(this, SeekBar);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
+	    var _this = _possibleConstructorReturn(this, (SeekBar.__proto__ || Object.getPrototypeOf(SeekBar)).call(this, props));
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SeekBar.__proto__ || Object.getPrototypeOf(SeekBar)).call.apply(_ref, [this].concat(args))), _this), _this._isPlayingOnMouseDown = false, _this._onChangeUsed = false, _this._handleMouseDown = function () {
-	      _this._isPlayingOnMouseDown = _this.props.media.isPlaying;
-	      _this.props.media.pause();
-	    }, _this._handleMouseUp = function (_ref2) {
-	      var value = _ref2.target.value;
+	    _this._isPlayingOnMouseDown = false;
+	    _this._onChangeUsed = false;
+
+	    _this._handleMouseDown = function () {
+	      var _this$props = _this.props,
+	          isPlaying = _this$props.isPlaying,
+	          progress = _this$props.progress;
+
+	      _this._isPlayingOnMouseDown = isPlaying;
+	      _this._neverPlayed = progress === 0;
+	      _this.props.pause();
+	      _this.setState({ dragCurrentTime: null });
+	    };
+
+	    _this._handleMouseUp = function (_ref) {
+	      var value = _ref.target.value;
 
 	      // seek on mouseUp as well because of this bug in <= IE11
 	      // https://github.com/facebook/react/issues/554
 	      if (!_this._onChangeUsed) {
-	        _this.props.media.seekTo(+value);
+	        _this.props.seekTo(+value);
 	      }
 
 	      // only play if media was playing prior to mouseDown
 	      if (_this._isPlayingOnMouseDown) {
-	        _this.props.media.play();
+	        _this.props.play();
 	      }
-	    }, _this._handleChange = function (_ref3) {
-	      var value = _ref3.target.value;
+	      // on some players (at least vimeo and youtube), seekTo before the video was played will cause
+	      // it to play even if autoplay is off.
+	      else if (_this._neverPlayed) {
+	          _this.props.pause();
+	        }
+	      _this.setState({ dragCurrentTime: null });
+	    };
 
-	      _this.props.media.seekTo(+value);
+	    _this._handleChange = function (_ref2) {
+	      var value = _ref2.target.value;
+
+	      _this.props.seekTo(+value);
+	      _this.setState({ dragCurrentTime: +value });
 	      _this._onChangeUsed = true;
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    };
+
+	    _this.state = { dragCurrentTime: null };
+	    return _this;
 	  }
 
 	  _createClass(SeekBar, [{
-	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(_ref4) {
-	      var media = _ref4.media;
+	    key: "shouldComponentUpdate",
+	    value: function shouldComponentUpdate(_ref3, _ref4) {
+	      var currentTime = _ref3.currentTime,
+	          duration = _ref3.duration;
+	      var dragCurrentTime = _ref4.dragCurrentTime;
 
-	      return this.props.media.currentTime !== media.currentTime || this.props.media.duration !== media.duration;
+	      return this.state.dragCurrentTime !== dragCurrentTime || this.props.currentTime !== currentTime || this.props.duration !== duration;
 	    }
 	  }, {
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
 	      var _props = this.props,
 	          className = _props.className,
 	          style = _props.style,
-	          media = _props.media;
-	      var duration = media.duration,
-	          currentTime = media.currentTime;
+	          duration = _props.duration,
+	          currentTime = _props.currentTime;
+	      var dragCurrentTime = this.state.dragCurrentTime;
 
-	      return _react2.default.createElement('input', {
-	        type: 'range',
-	        step: 'any',
+	      var displayCurrentTime = currentTime;
+
+	      return _react2.default.createElement("input", {
+	        type: "range",
+	        step: "any",
 	        max: duration.toFixed(4),
-	        value: currentTime,
+	        value: displayCurrentTime,
 	        onMouseDown: this._handleMouseDown,
 	        onMouseUp: this._handleMouseUp,
 	        onChange: this._handleChange,
 	        className: className,
 	        style: _extends({
-	          backgroundSize: currentTime * 100 / duration + '% 100%'
+	          backgroundSize: displayCurrentTime * 100 / duration + '% 100%'
 	        }, style)
 	      });
 	    }
@@ -1979,10 +2993,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return SeekBar;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(SeekBar);
+	exports.default = SeekBar;
 
 /***/ },
-/* 25 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1997,11 +3011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
-
-	var _formatTime = __webpack_require__(22);
+	var _formatTime = __webpack_require__(27);
 
 	var _formatTime2 = _interopRequireDefault(_formatTime);
 
@@ -2025,9 +3035,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Duration, [{
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(_ref) {
-	      var media = _ref.media;
+	      var duration = _ref.duration;
 
-	      return this.props.media.duration !== media.duration;
+	      return this.props.duration !== duration;
 	    }
 	  }, {
 	    key: 'render',
@@ -2035,12 +3045,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props = this.props,
 	          className = _props.className,
 	          style = _props.style,
-	          media = _props.media;
+	          duration = _props.duration;
 
 	      return _react2.default.createElement(
 	        'time',
 	        { className: className, style: style },
-	        (0, _formatTime2.default)(media.duration)
+	        (0, _formatTime2.default)(duration)
 	      );
 	    }
 	  }]);
@@ -2048,10 +3058,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Duration;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(Duration);
+	exports.default = Duration;
 
 /***/ },
-/* 26 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2065,10 +3075,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2082,27 +3088,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(MuteUnmute, _Component);
 
 	  function MuteUnmute() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
 	    _classCallCheck(this, MuteUnmute);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MuteUnmute.__proto__ || Object.getPrototypeOf(MuteUnmute)).call.apply(_ref, [this].concat(args))), _this), _this._handleMuteUnmute = function () {
-	      _this.props.media.muteUnmute();
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _possibleConstructorReturn(this, (MuteUnmute.__proto__ || Object.getPrototypeOf(MuteUnmute)).apply(this, arguments));
 	  }
 
 	  _createClass(MuteUnmute, [{
 	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(_ref2) {
-	      var media = _ref2.media;
+	    value: function shouldComponentUpdate(_ref) {
+	      var isMuted = _ref.isMuted;
 
-	      return this.props.media.isMuted !== media.isMuted;
+	      return this.props.isMuted !== isMuted;
 	    }
 	  }, {
 	    key: 'render',
@@ -2110,7 +3106,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props = this.props,
 	          className = _props.className,
 	          style = _props.style,
-	          media = _props.media;
+	          isMuted = _props.isMuted,
+	          toggleMute = _props.toggleMute;
+
 
 	      return _react2.default.createElement(
 	        'button',
@@ -2118,9 +3116,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          type: 'button',
 	          className: className,
 	          style: style,
-	          onClick: this._handleMuteUnmute
+	          onClick: toggleMute
 	        },
-	        media.isMuted ? 'Unmute' : 'Mute'
+	        isMuted ? 'Unmute' : 'Mute'
 	      );
 	    }
 	  }]);
@@ -2128,13 +3126,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return MuteUnmute;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(MuteUnmute);
+	exports.default = MuteUnmute;
 
 /***/ },
-/* 27 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -2147,10 +3145,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2174,41 +3168,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	      args[_key] = arguments[_key];
 	    }
 
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Volume.__proto__ || Object.getPrototypeOf(Volume)).call.apply(_ref, [this].concat(args))), _this), _this._onChangeUsed = false, _this._handleMouseUp = function (_ref2) {
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Volume.__proto__ || Object.getPrototypeOf(Volume)).call.apply(_ref, [this].concat(args))), _this), _this._onChangeUsed = false, _this._setVolume = function (value) {
+	      return _this.props.setVolume(parseFloat((+value).toFixed(4)));
+	    }, _this._handleMouseUp = function (_ref2) {
 	      var value = _ref2.target.value;
 
 	      // set volume on mouseUp as well because of this bug in <= IE11
 	      // https://github.com/facebook/react/issues/554
 	      if (!_this._onChangeUsed) {
-	        _this.props.media.setVolume((+value).toFixed(4));
+	        _this._setVolume(value);
 	      }
 	    }, _this._handleChange = function (_ref3) {
 	      var value = _ref3.target.value;
 
-	      _this.props.media.setVolume((+value).toFixed(4));
+	      _this._setVolume(value);
 	      _this._onChangeUsed = true;
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 
 	  _createClass(Volume, [{
-	    key: 'shouldComponentUpdate',
+	    key: "shouldComponentUpdate",
 	    value: function shouldComponentUpdate(_ref4) {
-	      var media = _ref4.media;
+	      var volume = _ref4.volume;
 
-	      return this.props.media.volume !== media.volume;
+	      return this.props.volume !== volume;
 	    }
 	  }, {
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
 	      var _props = this.props,
 	          className = _props.className,
 	          style = _props.style,
-	          media = _props.media;
-	      var volume = media.volume;
+	          volume = _props.volume;
 
-	      return _react2.default.createElement('input', {
-	        type: 'range',
-	        step: 'any',
+	      return _react2.default.createElement("input", {
+	        type: "range",
+	        step: "any",
 	        min: 0,
 	        max: 1,
 	        value: volume,
@@ -2225,10 +3220,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Volume;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(Volume);
+	exports.default = Volume;
 
 /***/ },
-/* 28 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2243,10 +3238,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _withMediaProps = __webpack_require__(18);
-
-	var _withMediaProps2 = _interopRequireDefault(_withMediaProps);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -2259,27 +3250,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _inherits(Fullscreen, _Component);
 
 	  function Fullscreen() {
-	    var _ref;
-
-	    var _temp, _this, _ret;
-
 	    _classCallCheck(this, Fullscreen);
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Fullscreen.__proto__ || Object.getPrototypeOf(Fullscreen)).call.apply(_ref, [this].concat(args))), _this), _this._handleFullscreen = function () {
-	      _this.props.media.fullscreen();
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	    return _possibleConstructorReturn(this, (Fullscreen.__proto__ || Object.getPrototypeOf(Fullscreen)).apply(this, arguments));
 	  }
 
 	  _createClass(Fullscreen, [{
 	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(_ref2) {
-	      var media = _ref2.media;
+	    value: function shouldComponentUpdate(_ref) {
+	      var isFullscreen = _ref.isFullscreen;
 
-	      return this.props.media.isFullscreen !== media.isFullscreen;
+	      return this.props.isFullscreen !== isFullscreen;
 	    }
 	  }, {
 	    key: 'render',
@@ -2287,7 +3268,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props = this.props,
 	          className = _props.className,
 	          style = _props.style,
-	          media = _props.media;
+	          isFullscreen = _props.isFullscreen,
+	          fullscreen = _props.fullscreen;
+
 
 	      return _react2.default.createElement(
 	        'button',
@@ -2295,9 +3278,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          type: 'button',
 	          className: className,
 	          style: style,
-	          onClick: this._handleFullscreen
+	          onClick: fullscreen
 	        },
-	        media.isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'
+	        isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'
 	      );
 	    }
 	  }]);
@@ -2305,10 +3288,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Fullscreen;
 	}(_react.Component);
 
-	exports.default = (0, _withMediaProps2.default)(Fullscreen);
+	exports.default = Fullscreen;
 
 /***/ },
-/* 29 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2316,24 +3299,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.formatTime = exports.keyboardControls = undefined;
+	exports.mediaHelper = exports.formatTime = exports.keyboardControls = undefined;
 
-	var _keyboardControls2 = __webpack_require__(30);
+	var _keyboardControls2 = __webpack_require__(35);
 
 	var _keyboardControls3 = _interopRequireDefault(_keyboardControls2);
 
-	var _formatTime2 = __webpack_require__(22);
+	var _formatTime2 = __webpack_require__(27);
 
 	var _formatTime3 = _interopRequireDefault(_formatTime2);
+
+	var _mediaHelper2 = __webpack_require__(3);
+
+	var _mediaHelper3 = _interopRequireDefault(_mediaHelper2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.keyboardControls = _keyboardControls3.default;
 	exports.formatTime = _formatTime3.default;
+	exports.mediaHelper = _mediaHelper3.default;
 
 /***/ },
-/* 30 */
-/***/ function(module, exports) {
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -2341,20 +3329,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	exports.default = keyboardControls;
+
+	var _mediaHelper = __webpack_require__(3);
+
+	var _mediaHelper2 = _interopRequireDefault(_mediaHelper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var MEDIA_KEYS = [0, 'f', 'j', 'k', 'l', ',', '.', ' ', 'Home', 'End', 'ArrowLeft', 'ArrowTop', 'ArrowRight', 'ArrowDown'];
 
-	function keyboardControls(mediaProps, e) {
-	  var duration = mediaProps.duration,
-	      playPause = mediaProps.playPause,
-	      seekTo = mediaProps.seekTo,
-	      skipTime = mediaProps.skipTime,
-	      addVolume = mediaProps.addVolume,
-	      fullscreen = mediaProps.fullscreen;
+	function keyboardControls(e) {
 	  var key = e.key,
 	      shiftKey = e.shiftKey;
 
-	  // prevent default on any media keys
+	  var helper = _mediaHelper2.default.bind(this)();
 
+	  // prevent default on any media keys
 	  MEDIA_KEYS.some(function (_key) {
 	    return _key === key && e.preventDefault();
 	  });
@@ -2364,49 +3354,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Play/Pause
 	    case ' ':
 	    case 'k':
-	      playPause();
+	      helper.togglePlay();
 	      break;
 
 	    // Seeking Backwards
 	    case 'ArrowLeft':
-	      skipTime(shiftKey ? -10 : -5);
+	      helper.skip(shiftKey ? -10 : -5);
 	      break;
 	    case 'j':
-	      skipTime(shiftKey ? -10 : -5);
+	      helper.skip(shiftKey ? -10 : -5);
 	      break;
 	    case ',':
-	      skipTime(-1);
+	      helper.skip(-1);
 	      break;
 
 	    // Seeking Forwards
 	    case 'ArrowRight':
-	      skipTime(shiftKey ? 10 : 5);
+	      helper.skip(shiftKey ? 10 : 5);
 	      break;
 	    case 'l':
-	      skipTime(shiftKey ? 10 : 5);
+	      helper.skip(shiftKey ? 10 : 5);
 	      break;
 	    case '.':
-	      skipTime(1);
+	      helper.skip(1);
 	      break;
 	    case 0:
 	    case 'Home':
-	      seekTo(0);
+	      helper.seekTo(0);
 	      break;
 	    case 'End':
-	      seekTo(duration);
+	      helper.seekTo(this.state.statDuration);
 	      break;
 
 	    // Volume
 	    case 'ArrowUp':
-	      addVolume(shiftKey ? 10 : 5);
+	      helper.addVolume(shiftKey ? 10 : 5);
 	      break;
 	    case 'ArrowDown':
-	      addVolume(shiftKey ? -10 : -5);
+	      helper.addVolume(shiftKey ? -10 : -5);
 	      break;
 
 	    // Fullscreen
 	    case 'f':
-	      fullscreen();
+	      helper.fullscreen();
 	      break;
 	  }
 	}

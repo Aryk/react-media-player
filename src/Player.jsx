@@ -1,6 +1,6 @@
 import React, { Component, PropTypes, createElement } from 'react'
 import { findDOMNode } from 'react-dom'
-import shallowequal from 'shallowequal'
+import shallowEqual from 'shallowequal'
 import getVendor from './utils/get-vendor'
 import fullscreenChange from './utils/fullscreen-change'
 import requestFullscreen from './utils/request-fullscreen'
@@ -42,6 +42,7 @@ class Player extends Component {
     // Must passed in 'last_' through props to actually get these states changed.
     setSeekTo: PropTypes.number,
     setSkipTime: PropTypes.number,
+    setPauseOnceAt: PropTypes.number,
     setPlayback: PropTypes.oneOf(['playing', 'paused']),
     setVolume: PropTypes.number,
     setAddVolume: PropTypes.number,
@@ -58,6 +59,7 @@ class Player extends Component {
     // These must be passed in through props in order to initiate a state change. Changes to these will trigger actions.
     setSeekTo : null,
     setSkipTime: null,
+    setPauseOnceAt: null,
     setPlayback: 'paused',
     setVolume: 1,
     setAddVolume: null,
@@ -74,6 +76,8 @@ class Player extends Component {
     statMute: false, // should be same as default for setMute
     statFullscreen: false, // must correspond with setFullscreen
   };
+
+  static mediaStateKeys = Object.keys(Player.defaultMediaState);
 
   static defaultProps = Object.assign({
     extraProps: {},
@@ -105,7 +109,7 @@ class Player extends Component {
     const mediaState = this.mediaState;
     const newMediaState = Object.assign({}, Player.defaultMediaState, mediaState);
 
-    if (!shallowequal(mediaState, newMediaState)) {
+    if (!shallowEqual(mediaState, newMediaState)) {
       this.setMediaState(newMediaState);
     }
   }
@@ -157,12 +161,13 @@ class Player extends Component {
   _performMediaActions(newProps, lastProps = {}) {
     let actionPerformed = false;
 
+    // pauseAt doesn't trigger anything here, happens while item is playing...
     [
       ['seekTo', 'number'],
       ['skipTime', 'number'],
+      ['playback', 'string'],
       ['volume', 'number'],
       ['addVolume', 'number'],
-      ['playback', 'string'],
       ['mute', 'boolean'],
       ['fullscreen', 'boolean'],
     ].forEach((args) => {
@@ -272,17 +277,20 @@ class Player extends Component {
 
     onDuration: (statDuration) =>  this._updateStatAndRunCallback({statDuration}, 'onDuration', statDuration),
     onTimeUpdate: (statCurrentTime) => {
-      const { endTime } = this.props;
+      const { setPauseOnceAt, endTime } = this.props;
+      // @Aryk: Added 0.1 to anticipate the next keyframe
+      const anticipateNextFrame = statCurrentTime + 0.1 ;
 
       this._updateStatAndRunCallback({statCurrentTime}, 'onTimeUpdate', statCurrentTime);
 
-      if (this._vendor !== 'youtube') {
-        // @Aryk: Added 0.1 to anticipate the next keyframe
-        if (endTime && statCurrentTime + 0.1 > endTime) {
-          // @Aryk: For Youtube, stop() will also trigger onEnd, but
-          // we have Youtube as an exception, so we are ok here.
-          this._component.end(); // will trigger onEnd callbacks
-        }
+      if (this._vendor !== 'youtube' && endTime && anticipateNextFrame > endTime) {
+        // @Aryk: For Youtube, stop() will also trigger onEnd, but
+        // we are not in this block if we are on youtube.
+        this._component.end(); // will trigger onEnd callbacks
+      }
+
+      if (setPauseOnceAt && anticipateNextFrame > setPauseOnceAt) {
+        this._component.pause();
       }
     },
     onProgress: (statProgress) => {
@@ -301,7 +309,15 @@ class Player extends Component {
 
     onLoad: () => this._updateStatAndRunCallback({statPlayback: 'loading'}, 'onLoad'),
     onPlay: () => this._updateStatAndRunCallback({statPlayback: 'playing'}, 'onPlay'),
-    onPause: () => this._updateStatAndRunCallback({statPlayback: 'paused'}, 'onPause'),
+    onPause: () => {
+      let statUpdate = {statPlayback: 'paused'};
+
+      if (this.props.setPauseOnceAt) {
+        Object.assign(statUpdate, {setPauseOnceAt: null})
+      }
+
+      this._updateStatAndRunCallback(statUpdate, 'onPause')
+    },
     onEnd: () => {
       const { loop, onEnd, startTime } = this.props;
 

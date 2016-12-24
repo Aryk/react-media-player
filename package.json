@@ -38,6 +38,9 @@
     "react": "0.14.x || ^15.0.0",
     "react-dom": "0.14.x || ^15.0.0"
   },
+  "dependencies": {
+    "shallowequal": "0.2.2 "
+  },
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
@@ -48,7 +51,6 @@
     "chokidar": "^1.6.1",
     "css-loader": "^0.25.0",
     "http-server": "^0.9.0",
-    "shallowequal": "0.2.2 ",
     "node-libs-browser": "^1.0.0",
     "node-sass": "^3.2.0",
     "postcss-loader": "^0.13.0",
@@ -57,7 +59,6 @@
     "react-motion": "^0.4.2",
     "react-motion-ui-pack": "^0.9.0",
     "sass-loader": "^4.0.2",
-    "shallow-equal": "0.2.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.9.0"

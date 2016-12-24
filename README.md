@@ -387,14 +387,13 @@ There are more methods as well:
 
 ## `utils.keyboardControls`
 
-A special function that will provide keyboard support to the media player. Keyboard functions also operate by modifying the state.
+A special function that will provide keyboard support to the media player. Keyboard functions also operate by modifying the state. You can use this class directly, or call the `keyboardControls` method on the `mediaHelper` object.
 
 ```js
-
-import React, { Component } from 'react'
-import { Player, controls, utils } from 'react-media-player'
-const { PlayPause, CurrentTime, Progress, SeekBar, Duration, MuteUnmute, Volume, Fullscreen } = controls
-const { keyboardControls } = utils
+import React, { Component } from 'react';
+import { Player, controls, utils } from 'react-media-player';
+const { PlayPause, CurrentTime, Progress, SeekBar, Duration, MuteUnmute, Volume, Fullscreen } = controls;
+const { keyboardControls, mediaHelper } = utils;
 
 class MediaPlayer extends Component {
 
@@ -403,24 +402,22 @@ class MediaPlayer extends Component {
     this.state = Object.assign({}, Player.defaultMediaState);
   }
 
-  _stateGetter = () => this.state;
-  _stateSetter = (mediaState) => this.setState(mediaState);
-  _keyboardControls = keyboardControls.bind(this);
-  
+  _mediaHelper = mediaHelper(this);
+  // You could do this, but we've made it even easier...see below...
+  // _keyboardControls = keyboardControls.bind(this._mediaHelper);
+
   render() {
     return (
-        <div
-          className="media"
-          onKeyDown={this._keyboardControls}
-        >
-          <Player
-            src="against-them-all.mp3"
-            className="media-player"
-	         {...Player.extractPropsFromMediaState(this.state)}
-	         mediaStateGetter={this._stateGetter}
-	         mediaStateSetter={this._stateSetter}
-          />
-        </div>
+      <div
+        className="media"
+        onKeyDown={this._mediaHelper.keyboardControls}
+      >
+        <Player
+          src="against-them-all.mp3"
+          className="media-player"
+          {...this._mediaHelper.toPlayerProps}
+        />
+      </div>
     )
   }
 }

@@ -1,4 +1,5 @@
 import Player from '../Player'
+import keyboardControls from './keyboard-controls'
 /**
  * Two ways to use this function:
  *
@@ -35,8 +36,14 @@ export default function mediaHelper(getStateOrComponent, setState) {
   }
 
   return {
+    get state() {
+      return getState();
+    },
+    setState: setState,
     togglePlay: () => {
-      return setState({setPlayback: getState().statPlayback !== 'playing' ? 'playing' : 'paused'});
+      const currentPlayback = getState().statPlayback !== 'playing' ? 'playing' : 'paused';
+       setState({setPlayback: currentPlayback});
+      return currentPlayback;
     },
     toggleMute: () => setState({setMute: !getState().statMute}),
     get isPlaying() {
@@ -44,20 +51,36 @@ export default function mediaHelper(getStateOrComponent, setState) {
     },
     play: () => setState({setPlayback: 'playing'}),
     pause: () => setState({setPlayback: 'paused'}),
-    seekTo: (val) => setState({setSeekTo: val}),
+    pauseOnceAt: (time) => setState({setPauseOnceAt: time}),
+    seekTo: (time) => setState({setSeekTo: time}),
     skip: (val) => setState({setSkipTime: val}),
     addVolume: (val) => setState({setAddVolume: val}),
     setVolume: (val) => setState({setVolume: val}),
     fullscreen: () => setState({setFullscreen: true}),
-    get state() {
-      return getState();
+    get keyboardControls() {
+      return keyboardControls.bind(this);
     },
+    /**
+     * Creates the player probs and essentially connects your Player component to your store.
+     * @returns {{...playerProps, mediaStateGetter: *, mediaStateSetter: *}}
+     */
     toPlayerProps: () => {
       return {
         ...Player.extractPropsFromMediaState(getState()),
         mediaStateGetter: getState,
         mediaStateSetter: setState,
       };
-    }
+    },
+    /**
+     * Batch calls that call `setState`. If you want to reduce trips to your store, you may want to consider using this.
+     *
+     * @param func - Pass in a function that accepts a mediaHelper as an argument and perform operations on that.
+     */
+    batch: (func) => {
+      const localUpdates = {};
+      const localSetState = (updates) => Object.assign(localUpdates, updates);
+      func(mediaHelper(getState, localSetState));
+      setState(localUpdates);
+    },
   }
 }

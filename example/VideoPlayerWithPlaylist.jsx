@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import MediaPlayer from './MediaPlayer'
 import { utils, Player } from '../src/react-media-player'
 
-const { keyboardControls, mediaHelper } = utils;
+const { mediaHelper } = utils;
 
 const mod = (num, max) => ((num % max) + max) % max;
 
@@ -12,7 +12,8 @@ class Playlist extends Component {
   }
 
   render() {
-    const { tracks, currentTrack } = this.props
+    const { tracks, currentTrack } = this.props;
+
     return (
       <aside className="media-playlist">
         <header className="media-playlist-header">
@@ -48,7 +49,6 @@ export default class VideoPlayerWithPlaylist extends Component {
   }
 
   _media = mediaHelper(this);
-  _keyboardControls = keyboardControls.bind(this);
 
   _handleTrackClick = (track) => {
     this.setState({currentTrack: track})
@@ -93,7 +93,7 @@ export default class VideoPlayerWithPlaylist extends Component {
               onPlay={() => !autoPlay && this.setState({autoPlay: true})}
               onPause={() => this.setState({autoPlay: false})}
               onEnd={() => !repeatTrack && this._navigatePlaylist(1)}
-              keyboardControls={this._keyboardControls}
+              keyboardControls={this._media.keyboardControls}
               media={this._media}
             />
             <Playlist

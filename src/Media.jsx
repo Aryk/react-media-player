@@ -5,7 +5,7 @@ import Player  from './Player'
 class Media extends Component {
   static propTypes = {
     children: PropTypes.func.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);

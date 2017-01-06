@@ -24,9 +24,13 @@ export default function mediaHelper(getStateOrComponent, setState) {
   let getState;
   if (typeof getStateOrComponent === 'function') {
     getState = getStateOrComponent;
-    if (typeof setState !== 'function') {
-      throw Error("If you are passing in a getState function, please also pass in setState.")
-    }
+    setState = setState || ((updates) => { // getState only mode
+        throw Error("setState was not passed in so cannot perform updates.")
+      });
+  } else if (typeof setState === 'function') { // setState only mode
+    getState = () => {
+      throw Error("getState was not passed in so cannot read the media state.")
+    };
   } else if (getStateOrComponent.isReactComponent) {
     const reactComponent = getStateOrComponent;
     setState = reactComponent.setState.bind(reactComponent);
@@ -39,24 +43,46 @@ export default function mediaHelper(getStateOrComponent, setState) {
     get state() {
       return getState();
     },
-    setState: setState,
+    setState,
     togglePlay: () => {
       const currentPlayback = getState().statPlayback !== 'playing' ? 'playing' : 'paused';
        setState({setPlayback: currentPlayback});
       return currentPlayback;
     },
     toggleMute: () => setState({setMute: !getState().statMute}),
-    get isPlaying() {
-      return getState().statPlayback === 'playing'
-    },
     play: () => setState({setPlayback: 'playing'}),
     pause: () => setState({setPlayback: 'paused'}),
-    pauseOnceAt: (time) => setState({setPauseOnceAt: time}),
-    seekTo: (time) => setState({setSeekTo: time}),
+    pauseAt: (time) => setState({setPauseAt: time}),
+    // We also set the statCurrentTime here, because until
+    // the video starts playing the statCurrentTime will not be updated.
+    seekTo: (time, playAfterSeek) => {
+      let updates = {setSeekTo: time, statCurrentTime: time};
+      // When the video hasn't started playing yet, sometimes it will startplaying after seeking *before* the video
+      // is played (this happens with Youtube, for example).
+      if (playAfterSeek === undefined && !getState().statCurrentTime) {
+        playAfterSeek = false;
+      }
+      if (playAfterSeek !== undefined) {
+        Object.assign(updates, {setPlayback: playAfterSeek ? 'playing' : 'paused'})
+      }
+      setState(updates)
+    },
     skip: (val) => setState({setSkipTime: val}),
     addVolume: (val) => setState({setAddVolume: val}),
     setVolume: (val) => setState({setVolume: val}),
     fullscreen: () => setState({setFullscreen: true}),
+
+    // Direct getters for the stat properties.
+    get currentTime() { return getState().statCurrentTime; },
+    get progress() { return getState().statProgress; },
+    get duration() { return getState().statDuration; },
+    get playback() { return getState().statPlayback; },
+    get volume() { return getState().statVolume; },
+    // is* follows convention for isPlaying
+    get isPlaying() { return getState().statPlayback === 'playing' },
+    get isMuted() { return getState().statMute; },
+    get isFullscreen() { return getState().statFullscreen; },
+
     get keyboardControls() {
       return keyboardControls.bind(this);
     },

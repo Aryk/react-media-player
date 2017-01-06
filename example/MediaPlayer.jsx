@@ -27,7 +27,7 @@ class MediaPlayer extends Component {
 
     return (
       <div
-        className={'media-player' + (media.state.statFullscreen ? ' media-player--fullscreen' : '')}
+        className={'media-player' + (media.isFullscreen ? ' media-player--fullscreen' : '')}
         onKeyDown={keyboardControls}
         tabIndex="0"
       >
@@ -45,24 +45,24 @@ class MediaPlayer extends Component {
           <div className="media-row">
             <CurrentTime
               className="media-control media-control--current-time"
-              currentTime={media.state.statCurrentTime}
+              currentTime={media.currentTime}
             />
             {currentTrack}
             <Duration
               className="media-control media-control--duration"
-              duration={media.state.statDuration}
+              duration={media.duration}
             />
           </div>
           <div className="media-control-group media-control-group--seek">
             <Progress
               className="media-control media-control--progress"
-              progress={media.state.statProgress}
+              progress={media.progress}
             />
             <SeekBar
               className="media-control media-control--seekbar"
-              progress={media.state.statProgress}
-              duration={media.state.statDuration}
-              currentTime={media.state.statCurrentTime}
+              progress={media.progress}
+              duration={media.duration}
+              currentTime={media.currentTime}
               isPlaying={media.isPlaying}
               pause={media.pause}
               play={media.play}
@@ -73,8 +73,8 @@ class MediaPlayer extends Component {
             <div className="media-control-group">
               <MuteUnmute
                 className="media-control media-control--mute-unmute"
-                volume={media.state.statVolume}
-                isMuted={media.state.statMute}
+                volume={media.volume}
+                isMuted={media.isMuted}
                 toggleMute={media.toggleMute}
               />
             </div>

@@ -447,7 +447,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Don't update component since we really just need to run some javascript functions controlling the player.
 	        return false;
 	      } else {
-	        return true;
+	        return this._videoParamsNotEqual(this.props, nextProps);
 	      }
 	    }
 	  }, {
@@ -463,7 +463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_videoParamsNotEqual',
 	    value: function _videoParamsNotEqual(paramsA, paramsB) {
-	      return paramsA.src !== paramsB.src || paramsA.startSeconds !== paramsB.startSeconds || paramsA.endSeconds !== paramsB.endSeconds;
+	      return paramsA.src !== paramsB.src || paramsA.startSeconds !== paramsB.startSeconds || paramsA.endSeconds !== paramsB.endSeconds || paramsA.vendor !== paramsB.vendor || paramsA.autoPlay !== paramsB.autoPlay || paramsA.loop !== paramsB.loop;
 	    }
 	  }, {
 	    key: '_performMediaActions',
@@ -531,6 +531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          component = _getVendor.component;
 
 	      this._vendor = vendor;
+	      this._debug('Rendering Player Component: ', this.props);
 
 	      return (0, _react.createElement)(component, _extends({
 	        ref: this._setComponent

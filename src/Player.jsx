@@ -128,7 +128,7 @@ class Player extends Component {
       // Don't update component since we really just need to run some javascript functions controlling the player.
       return false;
     } else {
-      return true;
+      return this._videoParamsNotEqual(this.props, nextProps);
     }
   }
 
@@ -148,7 +148,10 @@ class Player extends Component {
   _videoParamsNotEqual(paramsA, paramsB) {
     return paramsA.src!==paramsB.src ||
       paramsA.startSeconds!==paramsB.startSeconds ||
-      paramsA.endSeconds!==paramsB.endSeconds
+      paramsA.endSeconds!==paramsB.endSeconds ||
+      paramsA.vendor!==paramsB.vendor ||
+      paramsA.autoPlay!==paramsB.autoPlay ||
+      paramsA.loop!==paramsB.loop;
   }
 
   _debug = (...args) => {
@@ -380,6 +383,7 @@ class Player extends Component {
     const { src, vendor: _vendor, autoPlay, startTime, endTime, extraProps } = this.props;
     const { vendor, component } = getVendor(src, _vendor);
     this._vendor = vendor;
+    this._debug(`Rendering Player Component: `, this.props);
 
     return(
       createElement(component, {

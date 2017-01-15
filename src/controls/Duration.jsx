@@ -10,7 +10,7 @@ class Duration extends Component {
     const { className, style, duration } = this.props;
     return (
       <time className={className} style={style}>
-        {formatTime(duration)}
+        {duration ? formatTime(duration) : "0:00"}
       </time>
     )
   }

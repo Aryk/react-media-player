@@ -124,17 +124,13 @@ class Player extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this._performMediaActions(nextProps, this.props)) {
-      // Don't update component since we really just need to run some javascript functions controlling the player.
-      return false;
-    } else {
-      return this._videoParamsNotEqual(this.props, nextProps);
-    }
+    this._performMediaActions(nextProps, this.props);
+    return this._videoParamsNotEqual(this.props, nextProps);
   }
 
   componentWillUpdate(nextProps) {
     // Clean state if the media source has changed
-    if (this._videoParamsNotEqual(this.props, nextProps)) {
+    if (this.props.src!==nextProps.src) {
       this.setMediaState(pickByKey(Player.defaultMediaState, (key) => key.substr(0, 4)==='stat'));
     }
   }

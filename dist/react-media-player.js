@@ -443,18 +443,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps) {
-	      if (this._performMediaActions(nextProps, this.props)) {
-	        // Don't update component since we really just need to run some javascript functions controlling the player.
-	        return false;
-	      } else {
-	        return this._videoParamsNotEqual(this.props, nextProps);
-	      }
+	      this._performMediaActions(nextProps, this.props);
+	      return this._videoParamsNotEqual(this.props, nextProps);
 	    }
 	  }, {
 	    key: 'componentWillUpdate',
 	    value: function componentWillUpdate(nextProps) {
 	      // Clean state if the media source has changed
-	      if (this._videoParamsNotEqual(this.props, nextProps)) {
+	      if (this.props.src !== nextProps.src) {
 	        this.setMediaState((0, _pickByKey2.default)(Player.defaultMediaState, function (key) {
 	          return key.substr(0, 4) === 'stat';
 	        }));
@@ -2464,7 +2460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          // reset duration if a new video was loaded
 	          if (data === CUED) {
-	            _this2.props.onDuration(0.1);
+	            _this2.props.onDuration(null);
 	          }
 	        },
 	        onError: function onError(e) {
@@ -3162,19 +3158,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	          currentTime = _props.currentTime;
 	      var dragCurrentTime = this.state.dragCurrentTime;
 
-	      var displayCurrentTime = currentTime;
+
+	      var displayCurrentTime = dragCurrentTime || currentTime;
 
 	      return _react2.default.createElement("input", {
 	        type: "range",
 	        step: "any",
-	        max: duration.toFixed(4),
+	        max: (duration || 0).toFixed(4),
 	        value: displayCurrentTime,
 	        onMouseDown: this._handleMouseDown,
 	        onMouseUp: this._handleMouseUp,
 	        onChange: this._handleChange,
 	        className: className,
 	        style: _extends({
-	          backgroundSize: displayCurrentTime * 100 / duration + '% 100%'
+	          backgroundSize: (duration ? displayCurrentTime * 100 / duration : 0) + '% 100%'
 	        }, style)
 	      });
 	    }
@@ -3240,7 +3237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement(
 	        'time',
 	        { className: className, style: style },
-	        (0, _formatTime2.default)(duration)
+	        duration ? (0, _formatTime2.default)(duration) : "0:00"
 	      );
 	    }
 	  }]);

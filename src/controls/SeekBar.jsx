@@ -51,20 +51,21 @@ class SeekBar extends Component {
   render() {
     const { className, style, duration, currentTime } = this.props;
     const { dragCurrentTime } = this.state;
-    const displayCurrentTime =  currentTime;
+
+    const displayCurrentTime =  dragCurrentTime || currentTime;
 
     return (
       <input
         type="range"
         step="any"
-        max={duration.toFixed(4)}
+        max={(duration || 0).toFixed(4)}
         value={displayCurrentTime}
         onMouseDown={this._handleMouseDown}
         onMouseUp={this._handleMouseUp}
         onChange={this._handleChange}
         className={className}
         style={{
-          backgroundSize: (displayCurrentTime * 100 / duration) + '% 100%',
+          backgroundSize: (duration ? (displayCurrentTime * 100 / duration) : 0)+ '% 100%',
           ...style
         }}
       />

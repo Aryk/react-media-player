@@ -129,7 +129,7 @@ class Youtube extends Component {
 
         // reset duration if a new video was loaded
         if (data === CUED) {
-          this.props.onDuration(0.1)
+          this.props.onDuration(null);
         }
       },
       onError: (e) => {

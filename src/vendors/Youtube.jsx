@@ -84,7 +84,8 @@ class Youtube extends Component {
       playerVars: {
         controls: 0,
         showinfo: 0,
-        modestbranding: 1
+        modestbranding: 1,
+        iv_load_policy: 3, // hide annotations.
       }
     })
   }

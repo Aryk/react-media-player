@@ -1,5 +1,5 @@
 /*!
- * React Media Player 0.6.0
+ * React Media Player 0.6.1-ag
  * https://github.com/souporserious/react-media-player
  * Copyright (c) 2017 React Media Player Authors
  */
@@ -2405,8 +2405,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playerVars: {
 	          controls: 0,
 	          showinfo: 0,
-	          modestbranding: 1
-	        }
+	          modestbranding: 1,
+	          iv_load_policy: 3 }
 	      });
 	    }
 	  }, {

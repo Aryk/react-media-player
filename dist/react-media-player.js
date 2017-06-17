@@ -257,7 +257,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playAfterSeek = false;
 	      }
 	      if (playAfterSeek !== undefined) {
-	        Object.assign(updates, { setPlayback: playAfterSeek ? 'playing' : 'paused' });
+	        updates = Object.assign({ setPlayback: playAfterSeek ? 'playing' : 'paused' }, updates);
 	      }
 	      setState(updates);
 	    },
@@ -505,7 +505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //   3, 3.1, 3.2 (then seekTo(5)), 5, 3.3, 5.1, 5.2, 5.3...
 	    //
 	    // So you have a 3.3 in there that shouldn't really be there, so we will ignore it. We use a buffer of 0.2, so we
-	    // wait until the readings start being inside the
+	    // wait until the readings start being inside the correct range.
 
 
 	    // Component callbacks are responsible for updating all the mediaState 'stat*" keys AND running the passed in callbacks

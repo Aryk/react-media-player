@@ -63,7 +63,7 @@ export default function mediaHelper(getStateOrComponent, setState) {
         playAfterSeek = false;
       }
       if (playAfterSeek !== undefined) {
-        Object.assign(updates, {setPlayback: playAfterSeek ? 'playing' : 'paused'})
+        updates = Object.assign({setPlayback: playAfterSeek ? 'playing' : 'paused'}, updates);
       }
       setState(updates)
     },

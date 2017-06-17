@@ -259,7 +259,7 @@ class Player extends Component {
     //   3, 3.1, 3.2 (then seekTo(5)), 5, 3.3, 5.1, 5.2, 5.3...
     //
     // So you have a 3.3 in there that shouldn't really be there, so we will ignore it. We use a buffer of 0.2, so we
-    // wait until the readings start being inside the
+    // wait until the readings start being inside the correct range.
   _ignoreUntilSeekToCatchesUp = currentTime => {
     let ignore = false;
     if (this.ignoreUntilSeekToStarts) {

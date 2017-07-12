@@ -125,7 +125,7 @@ class Player extends Component {
 
   shouldComponentUpdate(nextProps) {
     this._performMediaActions(nextProps, this.props);
-    return this._videoParamsNotEqual(this.props, nextProps);
+    return this._videoPropsNotEqual(this.props, nextProps);
   }
 
   componentWillUpdate(nextProps) {
@@ -141,13 +141,13 @@ class Player extends Component {
     return this._component && this._component.instance
   }
 
-  _videoParamsNotEqual(paramsA, paramsB) {
-    return paramsA.src!==paramsB.src ||
-      paramsA.startSeconds!==paramsB.startSeconds ||
-      paramsA.endSeconds!==paramsB.endSeconds ||
-      paramsA.vendor!==paramsB.vendor ||
-      paramsA.autoPlay!==paramsB.autoPlay ||
-      paramsA.loop!==paramsB.loop;
+  _videoPropsNotEqual(propsA, propsB) {
+    return propsA.src  !== propsB.src       ||
+      propsA.startTime !== propsB.startTime ||
+      propsA.endTime   !== propsB.endTime   ||
+      propsA.vendor    !== propsB.vendor    ||
+      propsA.autoPlay  !== propsB.autoPlay  ||
+      propsA.loop      !== propsB.loop;
   }
 
   _debug = (...args) => {
@@ -159,6 +159,16 @@ class Player extends Component {
   // Detects changes in the incoming props and performs the corresponding operation.
   _performMediaActions(newProps, lastProps = {}) {
     let actionPerformed = false;
+
+    // Infer certain actions if the source didn't change, but newProps has some new values.
+    if (Object.keys(lastProps).length && newProps.src === lastProps.src) {
+      if (newProps.startTime !== lastProps.startTime) {
+        newProps = Object.assign({
+          setSeekTo:   newProps.startTime,
+          setPlayback: newProps.autoPlay ? 'playing' : 'paused',
+        }, newProps);
+      }
+    }
 
     // pauseAt doesn't trigger anything here, happens while item is playing...
     // order is important here. For example, if you have seekTo and then play after, we should make sure that that
@@ -253,13 +263,13 @@ class Player extends Component {
     }
   };
 
-    // @Aryk: Basically what is happening here is that on some players (ie Youtube), after you seek, you still
-    // get a few key frames from finishing where it was at before. So the currentime will look like this:
-    //
-    //   3, 3.1, 3.2 (then seekTo(5)), 5, 3.3, 5.1, 5.2, 5.3...
-    //
-    // So you have a 3.3 in there that shouldn't really be there, so we will ignore it. We use a buffer of 0.2, so we
-    // wait until the readings start being inside the correct range.
+  // @Aryk: Basically what is happening here is that on some players (ie Youtube), after you seek, you still
+  // get a few key frames from finishing where it was at before. So the currentime will look like this:
+  //
+  //   3, 3.1, 3.2 (then seekTo(5)), 5, 3.3, 5.1, 5.2, 5.3...
+  //
+  // So you have a 3.3 in there that shouldn't really be there, so we will ignore it. We use a buffer of 0.2, so we
+  // wait until the readings start being inside the correct range.
   _ignoreUntilSeekToCatchesUp = currentTime => {
     let ignore = false;
     if (this.ignoreUntilSeekToStarts) {

@@ -44,7 +44,7 @@ export default class VideoPlayerWithPlaylist extends Component {
       currentTrack: props.playlist[0],
       showMediaPlayer: true,
       repeatTrack: false,
-      autoPlay: false,
+      autoPlay: true,
     }, Player.defaultMediaState);
   }
 

@@ -1,5 +1,5 @@
 /*!
- * React Media Player 0.6.3-ag
+ * React Media Player 0.6.5-ag
  * https://github.com/souporserious/react-media-player
  * Copyright (c) 2017 React Media Player Authors
  */

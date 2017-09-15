@@ -77,6 +77,14 @@ class Player extends Component {
     statFullscreen: false, // must correspond with setFullscreen
   };
 
+  // @Aryk: Added 0.1 to anticipate the next keyframe. Overwrite if tweaking needed.
+  static anticipateNextFrame = 0.1;
+
+  // Used for calculating where the video will be on the next update currentTime update.
+  static currentTimeNextFrame(currentTime) {
+    return currentTime + this.anticipateNextFrame;
+  }
+
   static mediaStateKeys = Object.keys(Player.defaultMediaState);
 
   static defaultProps = Object.assign({
@@ -315,8 +323,7 @@ class Player extends Component {
     onDuration: (statDuration) =>  this._updateStatAndRunCallback({statDuration}, 'onDuration', statDuration),
     onTimeUpdate: (statCurrentTime) => {
       const { setPauseAt, endTime } = this.props;
-      // @Aryk: Added 0.1 to anticipate the next keyframe
-      const anticipateNextFrame = statCurrentTime + 0.1;
+      const currentTimeNextFrame = Player.currentTimeNextFrame(statCurrentTime);
 
       if (this._ignoreUntilSeekToCatchesUp(statCurrentTime)) {
         return;
@@ -325,13 +332,13 @@ class Player extends Component {
       this._updateStatAndRunCallback({statCurrentTime}, 'onTimeUpdate', statCurrentTime);
 
       // Youtube has stop time implemented.
-      if (this._vendor !== 'youtube' && endTime && anticipateNextFrame > endTime) {
+      if (this._vendor !== 'youtube' && endTime && currentTimeNextFrame > endTime) {
         // @Aryk: For Youtube, stop() will also trigger onEnd, but
         // we are not in this block if we are on youtube.
         this._component.end(); // will trigger onEnd callbacks
       }
 
-      if (setPauseAt && anticipateNextFrame > setPauseAt) {
+      if (setPauseAt && currentTimeNextFrame > setPauseAt) {
         this._component.pause();
       }
     },

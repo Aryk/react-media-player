@@ -1,7 +1,7 @@
 {
   "name": "react-media-player",
   "version": "'ag' means Aryk Grosz version ;)",
-  "version": "0.6.2-ag",
+  "version": "0.6.3-ag",
   "description": "React media player.",
   "main": "lib/react-media-player.js",
   "files": [
